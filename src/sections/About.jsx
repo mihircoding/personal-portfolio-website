@@ -49,30 +49,32 @@ export const About = () => {
 
             <div className="space-y-4 text-muted-foreground animate-fade-in animation-delay-200">
               <p>
-                I'm a passionate software engineer with over 5 years of
-                experience crafting digital products that make a difference. My
-                journey started with a curiosity for how things work on the web,
-                and it has evolved into a deep expertise in modern frontend
-                technologies.
+                I'm a recent graduate from the University of Maryland with a
+                Bachelor of Science in Information Science, specialized in Python
+                and data science. My journey in software engineering has been
+                shaped by hands-on experience through internships at FrontLine
+                Insurance and Cognitive GeoInterpretation Inc., where I've worked
+                on full-stack applications and machine learning projects.
               </p>
               <p>
-                I specialize in React, Next.js, and TypeScript, building
-                everything from sleek landing pages to complex enterprise
-                applications. My approach combines technical excellence with a
-                keen eye for design and user experience.
+                I'm passionate about machine learning and AI projects, with
+                experience using technologies like scikit-learn, XGBoost, and
+                OpenCV. I've built projects ranging from real-time ASL recognition
+                systems to data analysis tools, always eager to apply cutting-edge
+                technologies to solve real-world problems.
               </p>
               <p>
-                When I'm not coding, you'll find me exploring new technologies,
-                contributing to open-source projects, or sharing knowledge with
-                the developer community.
+                As a new graduate, I'm excited to gain more experience in the
+                software engineering space. I'm particularly interested in
+                opportunities that allow me to work with machine learning,
+                data science, and AI technologies while continuing to grow as a
+                developer.
               </p>
             </div>
 
             <div className="glass rounded-2xl p-6 glow-border animate-fade-in animation-delay-300">
               <p className="text-lg font-medium italic text-foreground">
-                "My mission is to create digital experiences that are not just
-                functional, but truly delightful — products that users love to
-                use and developers love to maintain."
+                "My mission is to learn and grow in the software engineering space. I want to solve pressing issues with cutting edge technologies."
               </p>
             </div>
           </div>

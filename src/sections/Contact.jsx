@@ -20,13 +20,13 @@ const contactInfo = [
   {
     icon: Phone,
     label: "Phone",
-    value: "+1 (555) 123-4567",
-    href: "tel:+15551234567",
+    value: "(850) 273-2335",
+    href: "tel:+18502732335",
   },
   {
     icon: MapPin,
     label: "Location",
-    value: "San Francisco, CA",
+    value: "Tallahassee, FL",
     href: "#",
   },
 ];

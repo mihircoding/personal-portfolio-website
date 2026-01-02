@@ -1,38 +1,52 @@
 const experiences = [
   {
-    period: "2022 — Present",
-    role: "Senior Frontend Engineer",
-    company: "Tech Innovators Inc.",
+    period: "June 2025 — August 2025",
+    role: "Full Stack SWE Intern",
+    company: "FrontLine Insurance",
+    location: "Orlando, FL",
     description:
-      "Leading frontend architecture for a suite of fintech products. Implemented micro-frontend architecture, reduced bundle size by 40%, and mentored a team of 5 developers.",
-    technologies: ["React", "TypeScript", "Next.js", "GraphQL"],
-    current: true,
-  },
-  {
-    period: "2020 — 2022",
-    role: "Frontend Engineer",
-    company: "Digital Solutions Co.",
-    description:
-      "Built and maintained multiple React applications for enterprise clients. Introduced automated testing practices that improved code coverage to 85%.",
-    technologies: ["React", "Redux", "Jest", "Cypress"],
+      "• Developed a full-stack time-tracking web application for employees to log and allocate hours across projects, streamlining internal operations.\n• Built and integrated backend services with Node.js and PostgreSQL, ensuring secure and scalable data storage for sensitive insurance workflows.\n• Leveraged Windsurf to integrate AI-driven automation into the workflow and management system, improving team productivity by 30%.",
+    technologies: ["Node.js", "PostgreSQL", "Windsurf"],
     current: false,
   },
   {
-    period: "2019 — 2020",
-    role: "Junior Developer",
-    company: "StartUp Labs",
+    period: "May 2024 — August 2024",
+    role: "Quality Engineering Intern",
+    company: "FrontLine Insurance",
+    location: "Orlando, FL",
     description:
-      "Contributed to the development of a SaaS platform from MVP to production. Collaborated with designers to implement pixel-perfect UI components.",
-    technologies: ["React", "Node.js", "MongoDB", "AWS"],
+      "• Developed automated test scripts in TypeScript using Playwright for insurance claim filing and policy creation.\n• Collaborated with cross-functional teams to integrate automated testing into CI/CD pipeline.\n• Enhanced testing efficiency for claim systems reducing manual testing efforts.",
+    technologies: ["TypeScript", "Playwright", "CI/CD"],
     current: false,
   },
   {
-    period: "2018 — 2019",
-    role: "Freelance Developer",
-    company: "Self-Employed",
+    period: "May 2022 — August 2022",
+    role: "Software Development Intern",
+    company: "Cognitive GeoInterpretation Inc.",
+    location: "Tallahassee, FL",
     description:
-      "Delivered custom web solutions for small businesses and startups. Built 15+ websites and applications, handling everything from design to deployment.",
-    technologies: ["JavaScript", "PHP", "WordPress", "MySQL"],
+      "• Collaborated with teams to streamline data processing and enhanced efficiency of seafloor mapping.\n• Played a pivotal role in interpreting complex data sets through generating graphs with Python.\n• Leveraged machine learning techniques (XGBoost) to analyze unknown terrain and ocean temperature data.",
+    technologies: ["Python", "XGBoost", "Machine Learning"],
+    current: false,
+  },
+  {
+    period: "December 2023 — April 2024",
+    role: "Sign Language Detection Application",
+    company: "Project",
+    location: "",
+    description:
+      "• Built a real-time ASL recognition tool via webcam input.\n• Evaluated multiple classifiers (Random Forest, Logistic Regression Neural Networks etc.) for performance.\n• Tagged and labeled 2000+ images using on-premise computing to enhance model accuracy.",
+    technologies: ["scikit-learn", "NumPy", "OpenCV"],
+    current: false,
+  },
+  {
+    period: "May 2023 — August 2023",
+    role: "Clinical Billing Application",
+    company: "Project",
+    location: "",
+    description:
+      "• Created a webpage with integrated frontend and backend solutions to ensure efficient billing processes.\n• Streamlined patient record management and procedure tracking for a local clinic.\n• Collaborated with clinic staff to understand their workflow requirements.",
+    technologies: ["jQuery", "Node.js", "SQL"],
     current: false,
   },
 ];
@@ -109,8 +123,11 @@ export const Experience = () => {
                       {exp.period}
                     </span>
                     <h3 className="text-xl font-semibold mt-2">{exp.role}</h3>
-                    <p className="text-muted-foreground">{exp.company}</p>
-                    <p className="text-sm text-muted-foreground mt-4">
+                    <p className="text-muted-foreground">
+                      {exp.company}
+                      {exp.location && ` • ${exp.location}`}
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-4 whitespace-pre-line">
                       {exp.description}
                     </p>
                     <div

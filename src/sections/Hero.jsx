@@ -4,30 +4,29 @@ import {
   ChevronDown,
   Github,
   Linkedin,
-  Twitter,
   Download,
 } from "lucide-react";
 import { AnimatedBorderButton } from "../components/AnimatedBorderButton";
 
 const skills = [
-  "React",
-  "Next.js",
-  "TypeScript",
   "Node.js",
-  "GraphQL",
-  "PostgreSQL",
-  "MongoDB",
-  "Redis",
-  "Docker",
-  "AWS",
-  "Vercel",
-  "Tailwind CSS",
-  "Prisma",
-  "Jest",
-  "Cypress",
-  "Figma",
+  "Python",
   "Git",
-  "GitHub Actions",
+  "GitHub",
+  "TypeScript",
+  "JavaScript",
+  "Sci-kit Learn",
+  "Pandas",
+  "NumPy",
+  "React",
+  "SQL",
+  "Matplotlib",
+  "OpenCV",
+  "Cursor",
+  "Windsurf",
+  "jQuery",
+  "Tesseract",
+  "Jenkins",
 ];
 
 export const Hero = () => {
@@ -69,7 +68,7 @@ export const Hero = () => {
             <div className="animate-fade-in">
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-primary">
                 <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-                Software Engineer • React Specialist
+                Software Engineer • Python developer
               </span>
             </div>
 
@@ -85,20 +84,23 @@ export const Hero = () => {
                 </span>
               </h1>
               <p className="text-lg text-muted-foreground max-w-lg animate-fade-in animation-delay-200">
-                Hi, I'm Pedro Machado — a software engineer specializing in
-                React, Next.js, and TypeScript. I build scalable, performant web
-                applications that users love.
+                Hi, I'm Mihir Konda - a new graduate from the University of Maryland with projects and experience in Python, Node.js and Typescript. I like to build and learn solutions to interesting problems.
               </p>
             </div>
 
             {/* CTAs */}
             <div className="flex flex-wrap gap-4 animate-fade-in animation-delay-300">
-              <Button size="lg">
+              <Button 
+                size="lg"
+                onClick={() => {
+                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
                 Contact Me <ArrowRight className="w-5 h-5" />
               </Button>
-              <AnimatedBorderButton>
+              <AnimatedBorderButton href="/resume.pdf" download>
                 <Download className="w-5 h-5" />
-                Download CV
+                Download Resume
               </AnimatedBorderButton>
             </div>
 
@@ -106,9 +108,8 @@ export const Hero = () => {
             <div className="flex items-center gap-4 animate-fade-in animation-delay-400">
               <span className="text-sm text-muted-foreground">Follow me: </span>
               {[
-                { icon: Github, href: "#" },
-                { icon: Linkedin, href: "#" },
-                { icon: Twitter, href: "#" },
+                { icon: Github, href: "https://github.com/mihircoding" },
+                { icon: Linkedin, href: "https://www.linkedin.com/in/mihir-konda/" },
               ].map((social, idx) => (
                 <a
                   key={idx}
@@ -133,7 +134,7 @@ export const Hero = () => {
               <div className="relative glass rounded-3xl p-2 glow-border">
                 <img
                   src="/profile-photo.jpg"
-                  alt="Pedro Machado"
+                  alt="Mihir Konda"
                   className="w-full aspect-[4/5] object-cover rounded-2xl"
                 />
 

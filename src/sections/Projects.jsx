@@ -2,6 +2,16 @@ import { ArrowUpRight, Github } from "lucide-react";
 import { AnimatedBorderButton } from "@/components/AnimatedBorderButton";
 const projects = [
   {
+    title: "Sign Language Detection Application",
+    description:
+      "A real-time ASL recognition tool via webcam input using OpenCV and MediaPipe. Evaluated multiple classifiers including Random Forest, Logistic Regression, and Neural Networks for performance.",
+    image: "/signLanguageProjectPicture.png",
+    tags: ["Python", "OpenCV", "MediaPipe", "Machine Learning"],
+    link: "https://github.com/mihircoding/sign-language-detector-python",
+    github: "https://github.com/mihircoding/sign-language-detector-python",
+    isPdf: false,
+  },
+  {
     title: "Animal Detection Model Report",
     description:
       "A report detailing my project turning the YOLOv3 image detection model into a animal detection model using tagging of backyard animals",

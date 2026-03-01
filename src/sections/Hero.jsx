@@ -77,10 +77,10 @@ export const Hero = () => {
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight animate-fade-in animation-delay-100">
                 Crafting <span className="text-primary glow-text">digital</span>
                 <br />
-                experiences with
+                products with
                 <br />
                 <span className="font-serif italic font-normal text-white">
-                  precision.
+                  passion.
                 </span>
               </h1>
               <p className="text-lg text-muted-foreground max-w-lg animate-fade-in animation-delay-200">
@@ -109,7 +109,7 @@ export const Hero = () => {
               <span className="text-sm text-muted-foreground">Follow me: </span>
               {[
                 { icon: Github, href: "https://github.com/mihircoding" },
-                { icon: Linkedin, href: "https://www.linkedin.com/in/mihir-konda/" },
+                { icon: Linkedin, href: "https://www.linkedin.com/in/mihirkonda/" },
               ].map((social, idx) => (
                 <a
                   key={idx}

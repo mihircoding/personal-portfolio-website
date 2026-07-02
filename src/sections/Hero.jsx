@@ -37,23 +37,24 @@ export const Hero = () => {
         <img
           src="/hero-bg.jpg"
           alt="Hero image"
-          className="w-full h-full object-cover opacity-40"
+          className="w-full h-full object-cover opacity-25 pixelated"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/80 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/85 to-background" />
       </div>
 
-      {/* Green Dots */}
+      {/* Pixel particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(30)].map((_, i) => (
           <div
-            className="absolute w-1.5 h-1.5 rounded-full opacity-60"
+            key={i}
+            className="absolute w-2 h-2 opacity-70"
             style={{
-              backgroundColor: "#20B2A6",
+              backgroundColor: "#92cc41",
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
               animation: `slow-drift ${
                 15 + Math.random() * 20
-              }s ease-in-out infinite`,
+              }s steps(10, end) infinite`,
               animationDelay: `${Math.random() * 5}s`,
             }}
           />
@@ -66,9 +67,9 @@ export const Hero = () => {
           {/* Left Column - Text Content */}
           <div className="space-y-8">
             <div className="animate-fade-in">
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-primary">
-                <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-                Software Engineer • Python developer
+              <span className="inline-flex items-center gap-2 px-4 py-2 glass font-pixel text-[10px] text-primary uppercase">
+                <span className="w-2 h-2 bg-primary animate-blink" />
+                Software Engineer • Python Dev
               </span>
             </div>
 
@@ -79,9 +80,7 @@ export const Hero = () => {
                 <br />
                 products with
                 <br />
-                <span className="font-serif italic font-normal text-white">
-                  passion.
-                </span>
+                <span className="font-serif font-normal">passion.</span>
               </h1>
               <p className="text-lg text-muted-foreground max-w-lg animate-fade-in animation-delay-200">
                 Hi, I'm Mihir Konda - a new graduate from the University of Maryland with projects and experience in Python, Node.js and Typescript. I like to build and learn solutions to interesting problems.
@@ -90,7 +89,7 @@ export const Hero = () => {
 
             {/* CTAs */}
             <div className="flex flex-wrap gap-4 animate-fade-in animation-delay-300">
-              <Button 
+              <Button
                 size="lg"
                 onClick={() => {
                   document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
@@ -100,13 +99,13 @@ export const Hero = () => {
               </Button>
               <AnimatedBorderButton href="/resume.pdf" download>
                 <Download className="w-5 h-5" />
-                Download Resume
+                Resume
               </AnimatedBorderButton>
             </div>
 
             {/* Social Links */}
             <div className="flex items-center gap-4 animate-fade-in animation-delay-400">
-              <span className="text-sm text-muted-foreground">Follow me: </span>
+              <span className="text-sm text-muted-foreground font-pixel text-[10px] uppercase">Follow me: </span>
               {[
                 { icon: Github, href: "https://github.com/mihircoding" },
                 { icon: Linkedin, href: "https://www.linkedin.com/in/mihirkonda/" },
@@ -114,7 +113,7 @@ export const Hero = () => {
                 <a
                   key={idx}
                   href={social.href}
-                  className="p-2 rounded-full glass hover:bg-primary/10 hover:text-primary transition-all duration-300"
+                  className="p-2 glass hover:bg-primary/10 hover:text-primary transition-all duration-150"
                 >
                   {<social.icon className="w-5 h-5" />}
                 </a>
@@ -122,30 +121,24 @@ export const Hero = () => {
             </div>
           </div>
           {/* Right Column - Profile Image */}
-          <div className="relatice animate-fade-in animation-delay-300">
+          <div className="animate-fade-in animation-delay-300">
             {/* Profile Image */}
             <div className="relative max-w-md mx-auto">
-              <div
-                className="absolute inset-0 
-              rounded-3xl bg-gradient-to-br 
-              from-primary/30 via-transparent 
-              to-primary/10 blur-2xl animate-pulse"
-              />
-              <div className="relative glass rounded-3xl p-2 glow-border">
+              <div className="pixel-frame">
                 <img
-                  src="/anotherpicofme.jpg"
+                  src="/me-hongkong.jpg"
                   alt="Mihir Konda"
-                  className="w-full aspect-[4/5] object-cover rounded-2xl"
+                  className="w-full aspect-[3/4] object-cover"
                 />
+              </div>
 
-                {/* Floating Badge */}
-                <div className="absolute -bottom-4 -right-4 glass rounded-xl px-4 py-3 animate-float">
-                  <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
-                    <span className="text-sm font-medium">
-                      Available for work
-                    </span>
-                  </div>
+              {/* Floating Badge */}
+              <div className="absolute -bottom-4 -right-4 glass px-4 py-3 animate-float">
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 bg-primary animate-blink" />
+                  <span className="text-[10px] font-pixel uppercase">
+                    Available for work
+                  </span>
                 </div>
               </div>
             </div>
@@ -154,7 +147,7 @@ export const Hero = () => {
 
         {/* Skills Section */}
         <div className="mt-20 animate-fade-in animation-delay-600">
-          <p className="text-sm text-muted-foreground mb-6 text-center">
+          <p className="text-xs text-muted-foreground mb-6 text-center font-pixel uppercase">
             Technologies I work with
           </p>
           <div className="relative overflow-hidden">
@@ -169,7 +162,7 @@ export const Hero = () => {
             <div className="flex animate-marquee">
               {[...skills, ...skills].map((skill, idx) => (
                 <div key={idx} className="flex-shrink-0 px-8 py-4">
-                  <span className="text-xl font-semibold text-muted-foreground/50 hover:text-muted-foreground transition-colors">
+                  <span className="text-xl font-semibold text-muted-foreground/50 hover:text-primary transition-colors">
                     {skill}
                   </span>
                 </div>
@@ -180,15 +173,15 @@ export const Hero = () => {
       </div>
 
       <div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 
+        className="absolute bottom-8 left-1/2 -translate-x-1/2
       animate-fade-in animation-delay-800"
       >
         <a
           href="#about"
-          className="flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors group"
+          className="flex flex-col items-center gap-2 text-primary hover:text-highlight transition-colors group"
         >
-          <span className="text-xs uppercase tracking-wider">Scroll</span>
-          <ChevronDown className="w-6 h-6 animate-bounce" />
+          <span className="text-[10px] font-pixel uppercase tracking-wider animate-blink">Press Start</span>
+          <ChevronDown className="w-6 h-6" />
         </a>
       </div>
     </section>

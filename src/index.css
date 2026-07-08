@@ -1,49 +1,32 @@
 @import "tailwindcss";
 
 @theme {
-  /* ===== 8-bit NES palette ===== */
-  --color-background: #14141f;
-  --color-foreground: #f7f7f7;
+  /* ===== Financial / fintech palette (emerald + gold on deep green-black) ===== */
+  --color-background: #0a130f;
+  --color-foreground: #eaf1ec;
 
-  --color-card: #1e1e33;
+  --color-card: #101a15;
 
-  --color-primary: #92cc41; /* NES green */
-  --color-primary-foreground: #0d0d14;
+  --color-primary: #10b981; /* emerald */
+  --color-primary-foreground: #04120b;
 
-  --color-secondary: #209cee; /* NES blue */
-  --color-secondary-foreground: #92cc41;
+  --color-secondary: #0e7c5a;
+  --color-secondary-foreground: #34d399;
 
-  --color-muted: #2a2a45;
-  --color-muted-foreground: #a3a3c2;
+  --color-muted: #17241d;
+  --color-muted-foreground: #8ba296;
 
-  --color-border: #3d3d63;
+  --color-border: #243830;
 
-  --radius: 0rem;
+  --radius: 0.75rem;
 
-  --color-highlight: #f7d51d; /* NES yellow */
-  --color-surface: #272745;
-
-  /* Square everything off — pixel art has no curves */
-  --radius-xs: 0px;
-  --radius-sm: 0px;
-  --radius-md: 0px;
-  --radius-lg: 0px;
-  --radius-xl: 0px;
-  --radius-2xl: 0px;
-  --radius-3xl: 0px;
-  --radius-4xl: 0px;
+  --color-highlight: #d4af37; /* gold */
+  --color-surface: #14201a;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
-  }
-
-  /* Kill every rounded corner so the whole UI reads as blocky 8-bit */
-  *,
-  *::before,
-  *::after {
-    border-radius: 0 !important;
   }
 
   button {
@@ -53,114 +36,101 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
-    font-family: "VT323", "Courier New", monospace;
-    font-size: 1.2rem;
-    line-height: 1.45;
-    letter-spacing: 0.02em;
-    /* faint game-map pixel grid */
-    background-image: linear-gradient(
-        rgba(146, 204, 65, 0.035) 1px,
-        transparent 1px
-      ),
-      linear-gradient(90deg, rgba(146, 204, 65, 0.035) 1px, transparent 1px);
-    background-size: 32px 32px;
-    image-rendering: pixelated;
+    font-family: "Inter", sans-serif;
+    /* faint dotted "ledger" grid */
+    background-image: radial-gradient(
+      circle at 1px 1px,
+      rgba(16, 185, 129, 0.06) 1px,
+      transparent 0
+    );
+    background-size: 42px 42px;
   }
 
-  /* Headlines use the same tall pixel font so existing sizes still fit */
-  h1,
-  h2,
-  h3 {
-    font-family: "VT323", "Courier New", monospace;
-    letter-spacing: 0.01em;
-  }
-
-  /* Was an italic serif accent — repurpose as a colored pixel accent word */
+  /* Elegant serif accent word, in gold, across all sections */
   .font-serif {
-    font-family: "VT323", "Courier New", monospace !important;
-    font-style: normal !important;
+    font-family: "Playfair Display", serif;
+    font-style: italic !important;
     color: var(--color-highlight) !important;
   }
 }
 
 @layer components {
-  /* The chunky pixel font used for labels, buttons, badges */
-  .font-pixel {
-    font-family: "Press Start 2P", "VT323", monospace;
-    letter-spacing: 0.02em;
-  }
-
-  /* Solid panels with a 4px border + hard offset drop shadow = 8-bit window */
   .glass {
-    background-color: var(--color-card);
-    border: 4px solid var(--color-border);
-    box-shadow: 4px 4px 0 0 rgba(0, 0, 0, 0.55);
-    backdrop-filter: none;
+    background-color: color-mix(in srgb, var(--color-card) 82%, transparent);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.35);
   }
 
   .glass-strong {
-    background-color: var(--color-background);
-    border: 4px solid var(--color-primary);
-    box-shadow: 4px 4px 0 0 rgba(0, 0, 0, 0.55);
-    backdrop-filter: none;
+    background-color: color-mix(in srgb, var(--color-card) 94%, transparent);
+    backdrop-filter: blur(20px);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 22%, var(--color-border));
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
   }
 
-  /* Hard, stepped text shadow instead of a soft neon blur */
   .glow-text {
-    text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.6),
-      0 0 1px color-mix(in srgb, var(--color-primary) 80%, transparent);
+    text-shadow: 0 0 26px color-mix(in srgb, var(--color-primary) 45%, transparent);
   }
 
   .glow-border {
-    box-shadow: 6px 6px 0 0 rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-primary) 22%, transparent),
+      0 18px 50px rgba(16, 185, 129, 0.12);
   }
 
-  /* Pixel buttons */
-  .pixel-btn {
-    border: 4px solid #0d0d14;
-    box-shadow: 4px 4px 0 0 rgba(0, 0, 0, 0.5);
-    text-transform: uppercase;
-    transition: transform 0.06s steps(1), box-shadow 0.06s steps(1),
-      filter 0.06s;
+  /* Primary + outline buttons */
+  .btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-primary-foreground);
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.28);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
   }
-  .pixel-btn:hover {
-    filter: brightness(1.1);
-  }
-  .pixel-btn:active {
-    transform: translate(4px, 4px);
-    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.5);
+  .btn-primary:hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.35);
   }
 
-  .pixel-btn-outline {
+  .btn-outline {
     background-color: transparent;
-    border: 4px solid var(--color-primary);
-    color: var(--color-primary);
-    box-shadow: 4px 4px 0 0 rgba(0, 0, 0, 0.5);
-    text-transform: uppercase;
-    transition: transform 0.06s steps(1), box-shadow 0.06s steps(1),
-      background-color 0.06s;
+    border: 1px solid color-mix(in srgb, var(--color-primary) 45%, var(--color-border));
+    color: var(--color-foreground);
+    transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
   }
-  .pixel-btn-outline:hover {
-    background-color: color-mix(in srgb, var(--color-primary) 18%, transparent);
-  }
-  .pixel-btn-outline:active {
-    transform: translate(4px, 4px);
-    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.5);
+  .btn-outline:hover {
+    border-color: var(--color-highlight);
+    color: var(--color-highlight);
+    background-color: color-mix(in srgb, var(--color-highlight) 8%, transparent);
   }
 
-  /* Photo frame: thick green pixel border with offset shadow */
-  .pixel-frame {
-    background-color: var(--color-card);
-    border: 6px solid var(--color-primary);
-    padding: 6px;
-    box-shadow: 8px 8px 0 0 rgba(0, 0, 0, 0.65);
+  /* Premium photo frame with gold top accent */
+  .photo-frame {
+    position: relative;
+    border-radius: 1rem;
+    border: 1px solid var(--color-border);
+    padding: 8px;
+    background: linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--color-primary) 14%, transparent),
+      transparent 55%
+    );
+    box-shadow: 0 26px 70px rgba(0, 0, 0, 0.55);
+  }
+  .photo-frame::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 18%;
+    right: 18%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-highlight), transparent);
   }
 }
 
 @layer utilities {
   @keyframes fade-in {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(20px); filter: blur(6px); }
+    to { opacity: 1; transform: translateY(0); filter: blur(0); }
   }
   @keyframes slow-drift {
     0%, 100% { transform: translate(0, 0); }
@@ -176,15 +146,10 @@
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }
   }
-  @keyframes blink {
-    0%, 49% { opacity: 1; }
-    50%, 100% { opacity: 0; }
-  }
 
-  .animate-fade-in { animation: fade-in 0.5s steps(6, end) both; }
-  .animate-float { animation: float 4s steps(8, end) infinite; }
-  .animate-marquee { animation: marquee 30s linear infinite; }
-  .animate-blink { animation: blink 1s steps(1) infinite; }
+  .animate-fade-in { animation: fade-in 0.8s ease-out both; }
+  .animate-float { animation: float 4s ease-in-out infinite; }
+  .animate-marquee { animation: marquee 32s linear infinite; }
 
   .animation-delay-100 { animation-delay: 100ms; }
   .animation-delay-200 { animation-delay: 200ms; }
@@ -194,7 +159,8 @@
   .animation-delay-600 { animation-delay: 600ms; }
   .animation-delay-800 { animation-delay: 800ms; }
 
-  .timeline-glow { box-shadow: 0 0 0 2px rgba(146, 204, 65, 0.4); }
-
-  .pixelated { image-rendering: pixelated; }
+  .timeline-glow {
+    box-shadow: 0 0 40px color-mix(in srgb, var(--color-primary) 35%, transparent),
+      0 0 80px color-mix(in srgb, var(--color-primary) 22%, transparent);
+  }
 }

@@ -127,7 +127,7 @@ export const Hero = () => {
             <div className="relative max-w-md mx-auto">
               <div className="photo-frame">
                 <img
-                  src="/me-hongkong.jpg"
+                  src="/4ed3a81b-167c-48a3-bfc3-db7311112182.jpg"
                   alt="Mihir Konda"
                   className="w-full aspect-[3/4] object-cover rounded-xl"
                 />

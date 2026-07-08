@@ -5,12 +5,12 @@ export const Button = ({
   ...props
 }) => {
   const baseClasses =
-    "pixel-btn font-pixel relative bg-primary text-primary-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-highlight";
+    "btn-primary relative overflow-hidden rounded-xl font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
   const sizeClasses = {
-    sm: "px-4 py-3 text-[10px]",
-    default: "px-6 py-4 text-xs",
-    lg: "px-7 py-4 text-sm",
+    sm: "px-4 py-2 text-sm",
+    default: "px-6 py-3 text-base",
+    lg: "px-8 py-4 text-lg",
   };
   const classes = `${baseClasses} ${sizeClasses[size]} ${className}`;
   return (

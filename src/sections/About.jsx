@@ -40,35 +40,23 @@ export const About = () => {
             </div>
 
             <h2 className="text-4xl md:text-5xl font-bold leading-tight animate-fade-in animation-delay-100 text-secondary-foreground">
-              Building the future,
-              <span className="font-serif italic font-normal text-white">
-                {" "}
-                one component at a time.
-              </span>
+              Who am I?
             </h2>
 
             <div className="space-y-4 text-muted-foreground animate-fade-in animation-delay-200">
               <p>
                 I'm a recent graduate from the University of Maryland with a
-                Bachelor of Science in Information Science, specialized in Python
+                Bachelor of Science in Computer Science, specialized in Python
                 and data science. My journey in software engineering has been
-                shaped by hands-on experience through internships at FrontLine
-                Insurance and Cognitive GeoInterpretation Inc., where I've worked
-                on full-stack applications and machine learning projects.
+                through internships working anywhere from insurance applications
+                to machine learning to automated testing.
               </p>
               <p>
-                I'm passionate about machine learning and AI projects, with
-                experience using technologies like scikit-learn, XGBoost, and
-                OpenCV. I've built projects ranging from real-time ASL recognition
-                systems to data analysis tools, always eager to apply cutting-edge
-                technologies to solve real-world problems.
-              </p>
-              <p>
-                As a new graduate, I'm excited to gain more experience in the
-                software engineering space. I'm particularly interested in
-                opportunities that allow me to work with machine learning,
-                data science, and AI technologies while continuing to grow as a
-                developer.
+                I'm passionate about the intersection of algorithms and finance.
+                I'm currently working on developing some financial projects
+                centered around trading different strategies including trading on
+                Polymarket and Kalshi. I'm excited for a future of learning and
+                gaining experience.
               </p>
             </div>
 
@@ -82,7 +70,7 @@ export const About = () => {
                 className="glass p-6 rounded-2xl animate-fade-in"
                 style={{ animationDelay: `${(idx + 1) * 100}ms` }}
               >
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 hover:bg-primary/20">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 transition-colors hover:bg-primary/15">
                   <item.icon className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-lg font-semibold mb-2">{item.title}</h3>

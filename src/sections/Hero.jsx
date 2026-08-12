@@ -70,7 +70,7 @@ export const Hero = () => {
           <div className="space-y-8">
             <div className="animate-fade-in">
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-primary">
-                <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                <span className="w-2 h-2 bg-primary rounded-full" />
                 Software Engineer • AI &amp; Tooling
               </span>
             </div>
@@ -81,7 +81,7 @@ export const Hero = () => {
                 Developing tools
                 <br />
                 that I{" "}
-                <span className="font-serif font-normal glow-text">love</span>
+                <span className="font-serif font-normal">love</span>
               </h1>
               <p className="text-lg text-muted-foreground max-w-lg animate-fade-in animation-delay-200">
                 Hi, I'm Mihir Konda - a new graduate from the University of Maryland with projects and experience in Python, C++, and AI driven development. I like to build, break and learn.

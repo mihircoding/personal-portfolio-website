@@ -1,62 +1,40 @@
-import { Github, Linkedin, Heart } from "lucide-react";
+import { Github, Linkedin, Mail } from "lucide-react";
+import { profile } from "@/data/site";
 
-const socialLinks = [
-  { icon: Github, href: "https://github.com/mihircoding", label: "GitHub" },
-  { icon: Linkedin, href: "https://www.linkedin.com/in/mihirkonda/", label: "LinkedIn" },
-];
-
-const footerLinks = [
-  { href: "#about", label: "About" },
-  { href: "#projects", label: "Projects" },
-  { href: "#experience", label: "Experience" },
-  { href: "#contact", label: "Contact" },
-];
-
-export const Footer = () => {
-  const currentYear = new Date().getFullYear();
-
-  return (
-    <footer className="py-12 border-t border-border">
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-          {/* Logo & Copyright */}
-          <div className="text-center md:text-left">
-            <a href="#" className="text-xl font-bold tracking-tight">
-              MK<span className="text-primary">.</span>
-            </a>
-            <p className="text-sm text-muted-foreground mt-2">
-              © {currentYear} Mihir Konda. All rights reserved.
-            </p>
-          </div>
-
-          {/* Links */}
-          <nav className="flex flex-wrap justify-center gap-6">
-            {footerLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
-
-          {/* Social Links */}
-          <div className="flex items-center gap-4">
-            {socialLinks.map((social) => (
-              <a
-                key={social.label}
-                href={social.href}
-                aria-label={social.label}
-                className="p-2 rounded-full glass hover:bg-primary/10 hover:text-primary transition-all"
-              >
-                <social.icon className="w-5 h-5" />
-              </a>
-            ))}
-          </div>
-        </div>
+export const Footer = () => (
+  <footer className="border-t border-border/60">
+    <div className="mx-auto flex max-w-4xl flex-col gap-4 px-6 py-8 sm:flex-row sm:items-center sm:justify-between">
+      <p className="text-xs text-muted-foreground">
+        © {new Date().getFullYear()} {profile.name}. Built with React, Vite and
+        Tailwind.
+      </p>
+      <div className="flex items-center gap-3">
+        <a
+          href={profile.github}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="GitHub"
+          className="text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <Github className="size-4" />
+        </a>
+        <a
+          href={profile.linkedin}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="LinkedIn"
+          className="text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <Linkedin className="size-4" />
+        </a>
+        <a
+          href={`mailto:${profile.email}`}
+          aria-label="Email"
+          className="text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <Mail className="size-4" />
+        </a>
       </div>
-    </footer>
-  );
-};
+    </div>
+  </footer>
+);

@@ -1,102 +1,79 @@
-import { Button } from "@/components/Button";
+import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { profile } from "@/data/site";
 
-const navLinks = [
-  { href: "#about", label: "About" },
-  { href: "#projects", label: "Projects" },
-  { href: "#experience", label: "Experience" },
+const links = [
+  { label: "Home", href: "/", match: "home" },
+  { label: "Projects", href: "/projects/", match: "projects" },
+  { label: "Experience", href: "/#experience", match: "experience" },
+  { label: "Resume", href: profile.resume, match: "resume", external: true },
 ];
 
-export const Navbar = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+export const Navbar = ({ active = "home" }) => {
+  const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const linkClass = (l) =>
+    `text-sm px-3 py-1.5 rounded-md transition-colors ${
+      l.match === active
+        ? "text-foreground font-medium"
+        : "text-muted-foreground hover:text-foreground hover:bg-accent"
+    }`;
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 transition-all duration-500 ${
-        isScrolled ? "glass-strong py-3" : "bg-transparent py-5"
-      }  z-50`}
-    >
-      <nav className="container mx-auto px-6 flex items-center justify-between">
+    <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/80 backdrop-blur-xl">
+      <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-6">
         <a
-          href="#"
-          className="text-xl font-bold tracking-tight hover:text-primary"
+          href="/"
+          className="text-sm font-semibold tracking-tight text-foreground"
         >
-          MK<span className="text-primary">.</span>
+          {profile.initials}.
         </a>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-1">
-          <div className="glass rounded-full px-2 py-1 flex items-center gap-1">
-            {navLinks.map((link, index) => (
-              <a
-                href={link.href}
-                key={index}
-                className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground rounded-full hover:bg-surface"
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* CTA Button */}
-        <div className="hidden md:block">
-          <Button 
-            size="sm"
-            onClick={() => {
-              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-            }}
-          >
-            Contact Me
-          </Button>
-        </div>
-
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden p-2 text-foreground cursor-pointer"
-          onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-        >
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </nav>
-
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden glass-strong animate-fade-in">
-          <div className="container mx-auto px-6 py-6 flex flex-col gap-4">
-            {navLinks.map((link, index) => (
-              <a
-                href={link.href}
-                key={index}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="text-lg text-muted-foreground hover:text-foreground py-2"
-              >
-                {link.label}
-              </a>
-            ))}
-
-            <Button 
-              onClick={() => {
-                setIsMobileMenuOpen(false);
-                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-              }}
+        <nav className="hidden items-center gap-1 md:flex">
+          {links.map((l) => (
+            <a
+              key={l.label}
+              href={l.href}
+              className={linkClass(l)}
+              {...(l.external
+                ? { target: "_blank", rel: "noreferrer" }
+                : {})}
             >
-              Contact Me
-            </Button>
-          </div>
+              {l.label}
+            </a>
+          ))}
+          <ThemeToggle />
+        </nav>
+
+        <div className="flex items-center gap-1 md:hidden">
+          <ThemeToggle />
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md text-foreground transition-opacity hover:opacity-60"
+          >
+            {open ? <X className="size-4" /> : <Menu className="size-4" />}
+          </button>
         </div>
+      </div>
+
+      {open && (
+        <nav className="border-t border-border/60 px-6 py-2 md:hidden">
+          {links.map((l) => (
+            <a
+              key={l.label}
+              href={l.href}
+              onClick={() => setOpen(false)}
+              className="block rounded-md px-2 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              {...(l.external ? { target: "_blank", rel: "noreferrer" } : {})}
+            >
+              {l.label}
+            </a>
+          ))}
+        </nav>
       )}
     </header>
   );

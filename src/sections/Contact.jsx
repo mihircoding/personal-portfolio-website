@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { AlertCircle, CheckCircle, Linkedin } from "lucide-react";
-import emailjs from "@emailjs/browser";
 import { profile } from "@/data/site";
 
 const field =
   "w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-muted-foreground/50";
+
+// FormSubmit relays the message to profile.email. No account or API key —
+// the first submission triggers a one-time confirmation email that has to be
+// clicked once, after which every message is delivered.
+const ENDPOINT = `https://formsubmit.co/ajax/${profile.email}`;
 
 export const Contact = () => {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
@@ -17,17 +21,27 @@ export const Contact = () => {
     setStatus({ type: null, message: "" });
 
     try {
-      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+      const res = await fetch(ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          _subject: `Portfolio contact form: ${formData.name}`,
+          _template: "table",
+          _captcha: "false",
+        }),
+      });
 
-      if (!serviceId || !templateId || !publicKey) {
-        throw new Error(
-          "EmailJS configuration is missing. Please check your environment variables."
-        );
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || String(data.success) !== "true") {
+        throw new Error(data.message || `Request failed (${res.status})`);
       }
-
-      await emailjs.send(serviceId, templateId, { ...formData }, publicKey);
 
       setStatus({
         type: "success",
@@ -35,10 +49,10 @@ export const Contact = () => {
       });
       setFormData({ name: "", email: "", message: "" });
     } catch (err) {
-      console.error("EmailJS error:", err);
+      console.error("Contact form error:", err);
       setStatus({
         type: "error",
-        message: err.text || "Failed to send. Try emailing me directly.",
+        message: `Couldn't send that — email me directly at ${profile.email}.`,
       });
     } finally {
       setIsLoading(false);
@@ -67,6 +81,7 @@ export const Contact = () => {
             </label>
             <input
               id="name"
+              name="name"
               type="text"
               required
               placeholder="Your name"
@@ -81,6 +96,7 @@ export const Contact = () => {
             </label>
             <input
               id="email"
+              name="email"
               type="email"
               required
               placeholder="you@email.com"
@@ -97,6 +113,7 @@ export const Contact = () => {
           </label>
           <textarea
             id="message"
+            name="message"
             rows={4}
             required
             placeholder="What's on your mind?"

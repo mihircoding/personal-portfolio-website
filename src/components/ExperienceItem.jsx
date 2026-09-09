@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ChevronDown, ExternalLink } from "lucide-react";
 import { Tag } from "@/components/Tag";
+import { LogoTile } from "@/components/LogoTile";
 
 export const ExperienceItem = ({ item, defaultOpen = false }) => {
   const [open, setOpen] = useState(defaultOpen);
@@ -11,27 +12,31 @@ export const ExperienceItem = ({ item, defaultOpen = false }) => {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="flex w-full items-start justify-between gap-4 text-left"
+        className="flex w-full items-start gap-3 text-left"
       >
-        <div className="min-w-0">
-          <div className="flex items-center gap-1.5">
-            <h3 className="text-sm font-semibold text-foreground">
-              {item.company}
-            </h3>
-            <ChevronDown
-              className={`size-3 flex-shrink-0 text-muted-foreground transition-transform duration-300 ${
-                open ? "rotate-180" : ""
-              }`}
-            />
+        <LogoTile src={item.logo} name={item.company} />
+
+        <div className="flex min-w-0 flex-1 items-start justify-between gap-4">
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5">
+              <h3 className="text-sm font-semibold text-foreground">
+                {item.company}
+              </h3>
+              <ChevronDown
+                className={`size-3 flex-shrink-0 text-muted-foreground transition-transform duration-300 ${
+                  open ? "rotate-180" : ""
+                }`}
+              />
+            </div>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              {item.role}
+              {item.location ? ` · ${item.location}` : ""}
+            </p>
           </div>
-          <p className="mt-0.5 text-xs text-muted-foreground">
-            {item.role}
-            {item.location ? ` · ${item.location}` : ""}
-          </p>
+          <span className="whitespace-nowrap font-mono text-xs tabular-nums text-muted-foreground">
+            {item.period}
+          </span>
         </div>
-        <span className="whitespace-nowrap font-mono text-xs tabular-nums text-muted-foreground">
-          {item.period}
-        </span>
       </button>
 
       <div
@@ -40,31 +45,36 @@ export const ExperienceItem = ({ item, defaultOpen = false }) => {
         }`}
       >
         <div className="min-h-0">
-          <ul className="mt-3 list-disc space-y-1.5 pl-4">
-            {item.points.map((p, i) => (
-              <li key={i} className="text-xs leading-relaxed text-muted-foreground">
-                {p}
-              </li>
-            ))}
-          </ul>
+          <div className="pl-[52px]">
+            <ul className="mt-3 list-disc space-y-1.5 pl-4">
+              {item.points.map((p, i) => (
+                <li
+                  key={i}
+                  className="text-xs leading-relaxed text-muted-foreground"
+                >
+                  {p}
+                </li>
+              ))}
+            </ul>
 
-          <div className="mt-3 flex flex-wrap items-center gap-1.5">
-            {item.tags?.map((t) => (
-              <Tag key={t}>{t}</Tag>
-            ))}
+            <div className="mt-3 flex flex-wrap items-center gap-1.5">
+              {item.tags?.map((t) => (
+                <Tag key={t}>{t}</Tag>
+              ))}
+            </div>
+
+            {item.href && (
+              <a
+                href={item.href}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-3 inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <ExternalLink className="size-3" />
+                Website
+              </a>
+            )}
           </div>
-
-          {item.href && (
-            <a
-              href={item.href}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-3 inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
-            >
-              <ExternalLink className="size-3" />
-              Website
-            </a>
-          )}
         </div>
       </div>
     </div>

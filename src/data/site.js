@@ -7,7 +7,7 @@ export const profile = {
   headline: "Hi, I'm Mihir",
   tagline:
     "A software engineer at IBM who spends his own time building quant research tools — options pricing, backtesting, and market microstructure, all from scratch.",
-  photo: "/4ed3a81b-167c-48a3-bfc3-db7311112182.jpg",
+  photo: "/avatar.jpg",
   location: "Baton Rouge, LA",
   email: "mihir.konda@gmail.com",
   phone: "(850) 273-2335",
@@ -18,7 +18,7 @@ export const profile = {
 };
 
 export const about = [
-  "I'm a software engineer at IBM in Baton Rouge, working on client delivery and AI/ML tooling. I studied Computer Science at the University of Maryland, and before IBM I interned across insurance applications, automated testing, and machine learning.",
+  "I'm a software engineer at IBM in Baton Rouge, building ServiceNow applications and integrations for enterprise clients. I studied Computer Science at the University of Maryland, and before IBM I interned across insurance applications, automated testing, and machine learning.",
   "Outside of work I build quantitative finance projects from scratch — pricing models, an event-driven backtester, a matching engine — because implementing a system is the fastest way to find out where your intuition about it is wrong. Most of these projects end with a result that disagrees with the textbook, and I write those up rather than hide them.",
 ];
 
@@ -29,21 +29,25 @@ export const experience = [
     location: "Baton Rouge, LA",
     period: "Jul 2026 — Present",
     href: "https://www.ibm.com",
+    logo: "/logo-ibm.png",
     points: [
-      "Consultant on ServiceNow application delivery, building and configuring applications for client engagements.",
-      "Working toward the ServiceNow Certified Application Developer certification.",
+      "Developing and deploying custom ServiceNow applications on the Now Platform to streamline enterprise IT service management workflows for internal stakeholders.",
+      "Automating business processes using Flow Designer, Business Rules and Script Includes in JavaScript, reducing manual ticket handling and turnaround time.",
+      "Building integrations between ServiceNow and external enterprise systems using REST APIs and IntegrationHub, ensuring reliable data flow across platforms.",
     ],
-    tags: ["ServiceNow", "JavaScript", "Python"],
+    tags: ["ServiceNow", "JavaScript", "REST APIs", "IntegrationHub"],
   },
   {
     company: "FrontLine Insurance",
-    role: "Full Stack SWE Intern",
+    role: "Software Engineering Intern",
     location: "Orlando, FL",
     period: "Jun 2025 — Aug 2025",
+    href: "https://www.frontlineinsurance.com",
+    logo: "/logo-frontline.png",
     points: [
-      "Developed a full-stack time-tracking web application for employees to log and allocate hours across projects, streamlining internal operations.",
-      "Built and integrated backend services with Node.js and PostgreSQL, ensuring secure and scalable data storage for sensitive insurance workflows.",
-      "Leveraged Windsurf to integrate AI-driven automation into the workflow and management system, improving team productivity by 30%.",
+      "Streamlined internal operations by engineering a full-stack time management application, cutting admin overhead for project hour allocation by 20%.",
+      "Enhanced productivity 30% by integrating AI-driven automation workflows with Windsurf, automating project management tasks and status updates.",
+      "Ensured data integrity for sensitive insurance workflows by designing a normalized relational schema in PostgreSQL to handle employee logs and projects.",
     ],
     tags: ["Node.js", "PostgreSQL", "Windsurf"],
   },
@@ -52,6 +56,8 @@ export const experience = [
     role: "Quality Engineering Intern",
     location: "Orlando, FL",
     period: "May 2024 — Aug 2024",
+    href: "https://www.frontlineinsurance.com",
+    logo: "/logo-frontline.png",
     points: [
       "Developed automated test scripts in TypeScript using Playwright for insurance claim filing and policy creation.",
       "Collaborated with cross-functional teams to integrate automated testing into the CI/CD pipeline.",
@@ -60,14 +66,15 @@ export const experience = [
     tags: ["TypeScript", "Playwright", "CI/CD"],
   },
   {
-    company: "Cognitive GeoInterpretation Inc.",
-    role: "Software Development Intern",
+    company: "Cognitive GeoInterpretation",
+    role: "AI/ML Intern",
     location: "Tallahassee, FL",
     period: "May 2022 — Aug 2022",
+    logo: null,
     points: [
-      "Collaborated with teams to streamline data processing and improve the efficiency of seafloor mapping.",
-      "Interpreted complex datasets by generating analysis graphs in Python.",
-      "Applied machine learning (XGBoost) to analyze unknown terrain and ocean temperature data.",
+      "Optimized seafloor mapping by developing Python-based data processing scripts, reducing data interpretation time by 25%.",
+      "Achieved 90% prediction accuracy analyzing unknown terrain by implementing and tuning XGBoost machine learning models.",
+      "Developed data visualizations of seafloor terrain predictions to help others see correlations between datasets.",
     ],
     tags: ["Python", "XGBoost", "Machine Learning"],
   },
@@ -77,7 +84,23 @@ export const education = [
   {
     school: "University of Maryland",
     degree: "B.S. in Computer Science",
-    period: "Graduated 2025",
+    location: "College Park, MD",
+    period: "Graduated 2026",
+    logo: "/logo-umd.png",
+    href: "https://www.umd.edu",
+  },
+];
+
+export const certifications = [
+  {
+    name: "Claude Certified Developer — Foundations",
+    issuer: "Anthropic",
+    badge: "/badge-claude-foundations.png",
+    href: "https://www.credly.com/org/anthropic/badge/claude-certified-developer-foundations",
+    // Flip to false to render an "In progress" label instead.
+    earned: true,
+    blurb:
+      "Anthropic's developer credential covering the Claude API, prompt engineering, tool use, agents, MCP and Claude Code integration.",
   },
 ];
 
@@ -102,6 +125,7 @@ export const skills = [
   "Node.js",
   "OpenCV",
   "Playwright",
+  "ServiceNow",
   "Git",
   "GitHub Actions",
   "Jenkins",
@@ -110,6 +134,7 @@ export const skills = [
 
 // ---------------------------------------------------------------------------
 // Projects. `featured` controls what shows on the home page.
+// `live` is what the card title and thumbnail link to.
 // ---------------------------------------------------------------------------
 
 export const projects = [
@@ -126,6 +151,7 @@ export const projects = [
     imageAlt:
       "Heatmap of Black-Scholes call value across spot price and volatility",
     tags: ["Python", "NumPy", "SciPy", "Plotly", "Streamlit"],
+    live: "https://mihircoding.github.io/options-pricer/",
     source: "https://github.com/mihircoding/options-pricer",
   },
   {
@@ -140,6 +166,7 @@ export const projects = [
     image: "/proj-backtest.png",
     imageAlt: "SPY price and strategy equity curves versus buy and hold",
     tags: ["Python", "pandas", "pytest", "Event-driven design"],
+    live: "https://mihircoding.github.io/backtestingEngine/",
     source: "https://github.com/mihircoding/backtestingEngine",
   },
   {
@@ -155,6 +182,7 @@ export const projects = [
     imageAlt:
       "Simulated mid price path and the emergent spread distribution from the order book",
     tags: ["Python", "Market microstructure", "pytest"],
+    live: "https://mihircoding.github.io/limitOrderBook/",
     source: "https://github.com/mihircoding/limitOrderBook",
   },
   {
@@ -170,9 +198,8 @@ export const projects = [
     imageAlt:
       "Histogram of out-of-sample Sharpe ratios for 930 cointegrated pairs, centred on zero",
     tags: ["Python", "statsmodels", "Cointegration", "Streamlit"],
-    source: "https://github.com/mihircoding/pairsTrading",
     live: "https://mihircoding.github.io/pairsTrading/",
-    liveLabel: "Explorer",
+    source: "https://github.com/mihircoding/pairsTrading",
   },
   {
     slug: "portfolio-optimization",
@@ -187,6 +214,7 @@ export const projects = [
     imageAlt:
       "Efficient frontier with the six candidate portfolios plotted against individual assets",
     tags: ["Python", "NumPy", "SciPy", "pytest"],
+    live: "https://mihircoding.github.io/portfolioOptimization/",
     source: "https://github.com/mihircoding/portfolioOptimization",
   },
   {
@@ -197,10 +225,11 @@ export const projects = [
     blurb:
       "A real-time ASL recognition tool driven by webcam input, using OpenCV and MediaPipe for hand landmark extraction.",
     detail:
-      "Evaluated Random Forest, logistic regression and neural network classifiers against each other, and tagged and labelled 2,000+ images on on-premise compute to improve model accuracy.",
+      "Trained a multi-class model on 2,000+ labelled images, optimised for low-latency webcam input, and raised precision 15% by comparing Random Forest and neural network architectures to find the most robust classifier for varying lighting. Presented at a hackathon.",
     image: "/signLanguageProjectPicture.png",
     imageAlt: "Sign language detection running on a webcam frame",
     tags: ["Python", "OpenCV", "MediaPipe", "scikit-learn"],
+    live: "https://github.com/mihircoding/sign-language-detector-python",
     source: "https://github.com/mihircoding/sign-language-detector-python",
   },
   {
@@ -214,6 +243,7 @@ export const projects = [
     image: "/cowSitting.webp",
     imageAlt: "A cow sitting in a field",
     tags: ["Python", "OpenCV", "YOLOv3"],
+    live: "/CS project report.pdf",
     report: "/CS project report.pdf",
     reportLabel: "Report (PDF)",
   },

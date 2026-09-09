@@ -243,7 +243,6 @@ export const projects = [
     image: "/cowSitting.webp",
     imageAlt: "A cow sitting in a field",
     tags: ["Python", "OpenCV", "YOLOv3"],
-    live: "/CS project report.pdf",
     report: "/CS project report.pdf",
     reportLabel: "Report (PDF)",
   },

@@ -70,7 +70,7 @@ export const experience = [
     role: "AI/ML Intern",
     location: "Tallahassee, FL",
     period: "May 2022 — Aug 2022",
-    logo: null,
+    logo: "/logo-cgi.png",
     points: [
       "Optimized seafloor mapping by developing Python-based data processing scripts, reducing data interpretation time by 25%.",
       "Achieved 90% prediction accuracy analyzing unknown terrain by implementing and tuning XGBoost machine learning models.",

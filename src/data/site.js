@@ -6,7 +6,7 @@ export const profile = {
   initials: "MK",
   headline: "Hi, I'm Mihir",
   tagline:
-    "A software engineer at IBM who spends his own time building quant research tools — options pricing, backtesting, and market microstructure, all from scratch.",
+    "A software engineer at IBM interested in financial markets and tools surrounding them.",
   photo: "/avatar.jpg",
   location: "Baton Rouge, LA",
   email: "mihir.konda@gmail.com",

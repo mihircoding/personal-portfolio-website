@@ -7,7 +7,7 @@ export const profile = {
   headline: "Hi, I'm Mihir",
   tagline:
     "A software engineer at IBM interested in financial markets and tools surrounding them.",
-  photo: "/avatar.jpg",
+  photo: "/4ed3a81b-167c-48a3-bfc3-db7311112182.jpg",
   location: "Baton Rouge, LA",
   email: "mihir.konda@gmail.com",
   phone: "(850) 273-2335",
@@ -245,6 +245,28 @@ export const projects = [
     tags: ["Python", "OpenCV", "YOLOv3"],
     report: "/CS project report.pdf",
     reportLabel: "Report (PDF)",
+  },
+  {
+    slug: "nutrivision",
+    title: "NutriVision",
+    group: "earlier",
+    featured: false,
+    blurb:
+      "A nutrition tracking app that uses AI-powered computer vision through Meta glasses to identify food items in real time.",
+    detail:
+      "Machine learning models estimate calories and nutritional information straight from the video feed. Built out to 100+ people to accommodate differing medical needs and let them share their tracking with their doctor.",
+    tags: ["Claude", "iOS", "Computer Vision", "Machine Learning"],
+  },
+  {
+    slug: "clinical-billing",
+    title: "Clinical Billing Management System",
+    group: "earlier",
+    featured: false,
+    blurb:
+      "A clinical billing application that uses optical character recognition to read data off documents and feed it into a centralised healthcare management system.",
+    detail:
+      "Includes an interface for doctors to review, edit and manage patient records with accurate date tracking. Automating the data entry cut billing processing time by 20%.",
+    tags: ["Python", "Node.js", "SQL", "OCR"],
   },
 ];
 

@@ -33,14 +33,18 @@ export const ProjectCard = ({ project, showDetail = false }) => {
 
       <div className="flex flex-1 flex-col p-4">
         <h3 className="text-sm font-semibold text-foreground">
-          <a
-            href={href}
-            {...linkProps}
-            className="inline-flex items-center gap-1 hover:underline hover:underline-offset-4"
-          >
-            {project.title}
-            <ArrowUpRight className="size-3 text-muted-foreground transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-          </a>
+          {href ? (
+            <a
+              href={href}
+              {...linkProps}
+              className="inline-flex items-center gap-1 hover:underline hover:underline-offset-4"
+            >
+              {project.title}
+              <ArrowUpRight className="size-3 text-muted-foreground transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </a>
+          ) : (
+            project.title
+          )}
         </h3>
 
         <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">

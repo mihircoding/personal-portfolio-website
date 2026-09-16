@@ -17,8 +17,7 @@ function ProjectsApp() {
           <p className="animate-enter delay-75 mt-3 max-w-2xl text-sm leading-7 text-muted-foreground">
             Quantitative finance tools built from scratch — pricing models, an
             event-driven backtester, a matching engine, portfolio optimizers and
-            a stat-arb study. Each one is tested, and each one reports what the
-            data actually said rather than the result I was hoping for.
+            a statistical arbitrage study, all in Python with test suites.
           </p>
         </section>
 

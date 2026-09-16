@@ -19,7 +19,7 @@ export const profile = {
 
 export const about = [
   "I'm a software engineer at IBM in Baton Rouge, building ServiceNow applications and integrations for enterprise clients. I studied Computer Science at the University of Maryland, and before IBM I interned across insurance applications, automated testing, and machine learning.",
-  "Outside of work I build quantitative finance projects from scratch — pricing models, an event-driven backtester, a matching engine — because implementing a system is the fastest way to find out where your intuition about it is wrong. Most of these projects end with a result that disagrees with the textbook, and I write those up rather than hide them.",
+  "Outside of work I build quantitative finance projects from scratch — options pricing, an event-driven backtester, a matching engine, portfolio optimizers and a statistical arbitrage study. All Python, each with a test suite and a write-up of what the backtests returned.",
 ];
 
 export const experience = [
@@ -162,7 +162,7 @@ export const projects = [
     blurb:
       "A backtester built the way production trading systems are: five components that talk only through a queue of events, one timestamp at a time. No component can see the future, because the future hasn't been pushed onto the queue yet.",
     detail:
-      "Roughly 300 lines of source and 32 tests. Strategies emit opinions, the portfolio turns them into sized orders, and the execution handler models slippage and commission — which is what makes the lookahead bias a vectorised pandas backtest invites structurally impossible. Includes a same-bar-close vs next-bar-open fill-timing experiment on SPY.",
+      "Roughly 300 lines of source and 32 tests. Strategies emit opinions, the portfolio turns them into sized orders, and the execution handler models slippage and commission. Includes a same-bar-close vs next-bar-open fill-timing experiment on SPY.",
     image: "/proj-backtest.png",
     imageAlt: "SPY price and strategy equity curves versus buy and hold",
     tags: ["Python", "pandas", "pytest", "Event-driven design"],
@@ -191,9 +191,9 @@ export const projects = [
     group: "quant",
     featured: true,
     blurb:
-      "A statistical arbitrage study on the S&P 100: screen every pair for cointegration on a formation window, then trade the survivors out of sample and see whether the screen predicted anything. It didn't.",
+      "A statistical arbitrage study on the S&P 100: screen every pair for cointegration on a formation window, then trade the survivors out of sample and measure whether the screen predicted anything.",
     detail:
-      "4,950 pairs tested, 930 passed at 5%, exactly one survived a Bonferroni correction, and the mean out-of-sample Sharpe across the survivors was indistinguishable from zero. The write-up leads with that rather than with the top of the leaderboard, and is explicit about survivorship bias in the universe.",
+      "4,950 pairs tested, 930 passed at 5%, exactly one survived a Bonferroni correction, and the mean out-of-sample Sharpe across the survivors was indistinguishable from zero. The universe is the S&P 100 as it stands today, so the study carries survivorship bias.",
     image: "/proj-pairs.png",
     imageAlt:
       "Histogram of out-of-sample Sharpe ratios for 930 cointegrated pairs, centred on zero",
@@ -207,7 +207,7 @@ export const projects = [
     group: "quant",
     featured: false,
     blurb:
-      "Markowitz mean-variance optimization, the efficient frontier, covariance shrinkage, risk parity and CVaR tail-risk optimization — then tested the only way that matters: out of sample.",
+      "Markowitz mean-variance optimization, the efficient frontier, covariance shrinkage, risk parity and CVaR tail-risk optimization, tested out of sample with a walk-forward harness.",
     detail:
       "In sample the max-Sharpe portfolio wins with a Sharpe of 0.90; it has to, it's defined as the in-sample argmax. Walked forward on a trailing estimation window it finishes fourth of six, behind equal weighting — which needs no estimation, no optimizer and no turnover. That result holds at every estimation window tested. 36 tests.",
     image: "/proj-portfolio.png",

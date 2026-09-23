@@ -19,7 +19,7 @@ export const profile = {
 
 export const about = [
   "I'm a software engineer at IBM in Baton Rouge, building ServiceNow applications and integrations for enterprise clients. I studied Computer Science at the University of Maryland, and before IBM I interned across insurance applications, automated testing, and machine learning.",
-  "Outside of work I build quantitative finance projects from scratch — options pricing, an event-driven backtester, a matching engine, portfolio optimizers and a statistical arbitrage study. All Python, each with a test suite and a write-up of what the backtests returned.",
+  "Outside of work I build quantitative finance projects from scratch — options pricing, an event-driven backtester, a matching engine, portfolio optimizers, a statistical arbitrage study, and an arbitrage and market-making system for prediction markets. All Python, each with a test suite and a write-up of what the backtests returned.",
 ];
 
 export const experience = [
@@ -138,6 +138,22 @@ export const skills = [
 // ---------------------------------------------------------------------------
 
 export const projects = [
+  {
+    slug: "esports-arb",
+    title: "Prediction Market Arbitrage",
+    group: "quant",
+    featured: true,
+    blurb:
+      "Cross-venue arbitrage, market making and series pricing across Kalshi and Polymarket esports markets, tested against real order books, the public trade tape and actual settlements.",
+    detail:
+      "12.9% of snapshots showed an arbitrage before fees and 2.8% after, almost always one contract deep. Quoting instead of taking earned 2.8c per contract out of sample across 589 matches, and lost 6.2c per contract inside two hours of the start, where the flow is informed. Streaming both venues over websockets, 97% of arbitrages were gone within a minute. A linear program over best-of-three outcomes found a $92 basket that pays the same whoever wins. 79 tests.",
+    image: "/proj-esports.png",
+    imageAlt:
+      "Cumulative market-making profit across 1,177 esports matches, with the out-of-sample half marked",
+    tags: ["Python", "WebSockets", "Market making", "SciPy", "pytest"],
+    live: "https://mihircoding.github.io/esports-arb/",
+    source: "https://github.com/mihircoding/esports-arb",
+  },
   {
     slug: "options-pricer",
     title: "Options Pricer",

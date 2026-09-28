@@ -146,7 +146,7 @@ export const projects = [
     blurb:
       "Cross-venue arbitrage, market making and series pricing across Kalshi and Polymarket esports markets, tested against real order books, the public trade tape and actual settlements.",
     detail:
-      "12.9% of snapshots showed an arbitrage before fees and 2.8% after, almost always one contract deep. Quoting instead of taking earned 2.8c per contract out of sample across 589 matches, and lost 6.2c per contract inside two hours of the start, where the flow is informed. Streaming both venues over websockets, 97% of arbitrages were gone within a minute. A linear program over best-of-three outcomes found a $92 basket that pays the same whoever wins. 79 tests.",
+      "12.9% of snapshots showed an arbitrage before fees and 2.8% after, almost always one contract deep. Quoting instead of taking earned 2.8c per contract out of sample across 589 matches, and lost 6.2c per contract inside two hours of the start, where the flow is informed. Streaming both venues over websockets, 97% of arbitrages were gone within a minute. A linear program over best-of-three outcomes found a $92 basket that pays the same whoever wins. Pricing Kalshi\u2019s map and totals markets off the match price found no edge \u2014 the model is calibrated but noisier than the market, and where they disagree the market is closer to the outcome. 83 tests.",
     image: "/proj-esports.png",
     imageAlt:
       "Cumulative market-making profit across 1,177 esports matches, with the out-of-sample half marked",

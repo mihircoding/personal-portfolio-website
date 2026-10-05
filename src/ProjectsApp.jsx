@@ -15,9 +15,10 @@ function ProjectsApp() {
             Projects
           </h1>
           <p className="animate-enter delay-75 mt-3 max-w-2xl text-sm leading-7 text-muted-foreground">
-            Quantitative finance tools built from scratch — pricing models, an
-            event-driven backtester, a matching engine, portfolio optimizers and
-            a statistical arbitrage study, all in Python with test suites.
+            Quantitative finance systems built from scratch — a matching engine
+            with the backtester that routes orders into it, two alpha strategies
+            with the risk allocator that sizes them, and a prediction market
+            arbitrage system. All Python, each with a test suite.
           </p>
         </section>
 

@@ -19,7 +19,7 @@ export const profile = {
 
 export const about = [
   "I'm a software engineer at IBM in Baton Rouge, building ServiceNow applications and integrations for enterprise clients. I studied Computer Science at the University of Maryland, and before IBM I interned across insurance applications, automated testing, and machine learning.",
-  "Outside of work I build quantitative finance projects from scratch — options pricing, an event-driven backtester, a matching engine, portfolio optimizers, a statistical arbitrage study, and an arbitrage and market-making system for prediction markets. All Python, each with a test suite and a write-up of what the backtests returned.",
+  "Outside of work I build quantitative finance systems from scratch — a matching engine with the backtester that routes orders into it, two alpha strategies with the risk allocator that sizes them, and an arbitrage and market-making system for prediction markets. All Python, each with a test suite and a write-up of what the backtests returned.",
 ];
 
 export const experience = [
@@ -155,81 +155,34 @@ export const projects = [
     source: "https://github.com/mihircoding/esports-arb",
   },
   {
-    slug: "options-pricer",
-    title: "Options Pricer",
+    slug: "market-simulation-stack",
+    title: "Market Simulation Stack",
     group: "quant",
     featured: true,
     blurb:
-      "Black-Scholes implemented from scratch — prices, Greeks, dividend adjustment — cross-checked against a Monte Carlo simulator and against live S&P 500 option quotes, including the volatility smile backed out of real market prices.",
+      "An event-driven backtester wired to a price-time priority matching engine, so a fill price is something the book prints rather than something a formula assumes. Every backtester charges you basis points for slippage; this one can walk a real order book instead.",
     detail:
-      "Ten classic multi-leg strategies (spreads, collars, straddles, butterflies, iron condors) with payoff diagrams, interactive price and PnL heatmaps over a spot × volatility grid, and a sanity suite that checks textbook values, put-call parity, Greeks against numerical derivatives, and an implied-vol round trip.",
-    image: "/proj-options.png",
-    imageAlt:
-      "Heatmap of Black-Scholes call value across spot price and volatility",
-    tags: ["Python", "NumPy", "SciPy", "Plotly", "Streamlit"],
-    live: "https://mihircoding.github.io/options-pricer/",
-    source: "https://github.com/mihircoding/options-pricer",
-  },
-  {
-    slug: "backtesting-engine",
-    title: "Event-Driven Backtesting Engine",
-    group: "quant",
-    featured: true,
-    blurb:
-      "A backtester built the way production trading systems are: five components that talk only through a queue of events, one timestamp at a time. No component can see the future, because the future hasn't been pushed onto the queue yet.",
-    detail:
-      "Roughly 300 lines of source and 32 tests. Strategies emit opinions, the portfolio turns them into sized orders, and the execution handler models slippage and commission. Includes a same-bar-close vs next-bar-open fill-timing experiment on SPY.",
+      "The two halves were separate projects with the same hole in them. Routing orders into the engine showed the standard flat 2bp charge is wrong in both directions — five times too expensive for an order the touch absorbs, fourteen times too cheap for one that walks 151 price levels, crossing over at 1.97% of a day's volume. It also exposed a flaw in the capacity study already there: its Sharpe ratio rises above $5bn, because the participation cap stops filling and the statistic ends up describing idle cash. 261 tests across the matching engine, the backtester and the bridge.",
     image: "/proj-backtest.png",
-    imageAlt: "SPY price and strategy equity curves versus buy and hold",
-    tags: ["Python", "pandas", "pytest", "Event-driven design"],
+    imageAlt:
+      "SPY equity curves against buy and hold, and the emergent spread distribution from the order book",
+    tags: ["Python", "Market microstructure", "Event-driven design", "pytest"],
     live: "https://mihircoding.github.io/backtestingEngine/",
     source: "https://github.com/mihircoding/backtestingEngine",
   },
   {
-    slug: "limit-order-book",
-    title: "Limit Order Book & Matching Engine",
+    slug: "alpha-to-allocation",
+    title: "Alpha to Allocation",
     group: "quant",
     featured: true,
     blurb:
-      "A price-time priority matching engine — the piece of infrastructure that is a modern exchange — plus a zero-intelligence order flow simulator to run through it.",
+      "Two alpha sleeves — 930 cointegrated equity pairs, and the variance risk premium harvested by delta-hedging short options — plus the full risk-allocation stack that decides how much of each to hold. Mean-variance, shrinkage, risk parity, CVaR, a factor model and hierarchical risk parity, all tested out of sample.",
     detail:
-      "The agents flip coins; they have no strategy at all. The book still produces a realistic spread distribution, concave price impact, and a mid price that mean-reverts at short horizons the way real equity data does. None of that was programmed in — it falls out of the matching rules. 42 tests, 50k simulated events.",
-    image: "/proj-lob.png",
-    imageAlt:
-      "Simulated mid price path and the emergent spread distribution from the order book",
-    tags: ["Python", "Market microstructure", "pytest"],
-    live: "https://mihircoding.github.io/limitOrderBook/",
-    source: "https://github.com/mihircoding/limitOrderBook",
-  },
-  {
-    slug: "pairs-trading",
-    title: "Pairs Trading",
-    group: "quant",
-    featured: true,
-    blurb:
-      "A statistical arbitrage study on the S&P 100: screen every pair for cointegration on a formation window, then trade the survivors out of sample and measure whether the screen predicted anything.",
-    detail:
-      "4,950 pairs tested, 930 passed at 5%, exactly one survived a Bonferroni correction, and the mean out-of-sample Sharpe across the survivors was indistinguishable from zero. The universe is the S&P 100 as it stands today, so the study carries survivorship bias.",
-    image: "/proj-pairs.png",
-    imageAlt:
-      "Histogram of out-of-sample Sharpe ratios for 930 cointegrated pairs, centred on zero",
-    tags: ["Python", "statsmodels", "Cointegration", "Streamlit"],
-    live: "https://mihircoding.github.io/pairsTrading/",
-    source: "https://github.com/mihircoding/pairsTrading",
-  },
-  {
-    slug: "portfolio-optimization",
-    title: "Portfolio Optimization",
-    group: "quant",
-    featured: false,
-    blurb:
-      "Markowitz mean-variance optimization, the efficient frontier, covariance shrinkage, risk parity and CVaR tail-risk optimization, tested out of sample with a walk-forward harness.",
-    detail:
-      "In sample the max-Sharpe portfolio wins with a Sharpe of 0.90; it has to, it's defined as the in-sample argmax. Walked forward on a trailing estimation window it finishes fourth of six, behind equal weighting — which needs no estimation, no optimizer and no turnover. That result holds at every estimation window tested. 36 tests.",
+      "The allocator had only ever been tested on assets, where equal weighting beat it at every estimation window. Pointed at two strategies that correlate +0.03, mean-variance finally wins — by more than a full unit of Sharpe, and not for the reason the textbook predicts. It wins because one sleeve loses money and only mean-variance can see it: risk parity, inverse vol, HRP and min variance never read an expected return, and the losing sleeve is the quieter one, so all four allocate 37–43% toward it. The reconciliation is a t-statistic on the return gap, computable before you pick an allocator. 243 tests.",
     image: "/proj-portfolio.png",
     imageAlt:
-      "Efficient frontier with the six candidate portfolios plotted against individual assets",
-    tags: ["Python", "NumPy", "SciPy", "pytest"],
+      "Efficient frontier with the candidate portfolios plotted against individual assets",
+    tags: ["Python", "NumPy", "SciPy", "statsmodels", "Streamlit", "pytest"],
     live: "https://mihircoding.github.io/portfolioOptimization/",
     source: "https://github.com/mihircoding/portfolioOptimization",
   },

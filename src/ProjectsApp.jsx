@@ -15,10 +15,9 @@ function ProjectsApp() {
             Projects
           </h1>
           <p className="animate-enter delay-75 mt-3 max-w-2xl text-sm leading-7 text-muted-foreground">
-            Quantitative finance systems built from scratch — a matching engine
-            with the backtester that routes orders into it, two alpha strategies
-            with the risk allocator that sizes them, and a prediction market
-            arbitrage system. All Python, each with a test suite.
+            Trading and market tools I built from scratch in Python. Each one
+            has a test suite and a write-up of what the numbers actually came
+            out to, including the parts that did not work.
           </p>
         </section>
 

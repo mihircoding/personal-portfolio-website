@@ -18,8 +18,8 @@ export const profile = {
 };
 
 export const about = [
-  "I'm a software engineer at IBM in Baton Rouge, building ServiceNow applications and integrations for enterprise clients. I studied Computer Science at the University of Maryland, and before IBM I interned across insurance applications, automated testing, and machine learning.",
-  "Outside of work I build quantitative finance systems from scratch — a matching engine with the backtester that routes orders into it, two alpha strategies with the risk allocator that sizes them, and an arbitrage and market-making system for prediction markets. All Python, each with a test suite and a write-up of what the backtests returned.",
+  "I'm a software engineer at IBM in Baton Rouge. I build ServiceNow apps and integrations for enterprise clients. I studied Computer Science at the University of Maryland, and before IBM I interned in insurance software, test automation and machine learning.",
+  "On the side I build trading and market tools from scratch in Python: an order book simulator with a backtester, a few trading strategies with a system that decides how much money each gets, and a bot that looks for mispriced bets on prediction markets. Each one has a test suite and a write-up of what actually happened when I ran it, including the parts that did not work.",
 ];
 
 export const experience = [
@@ -31,9 +31,9 @@ export const experience = [
     href: "https://www.ibm.com",
     logo: "/logo-ibm.png",
     points: [
-      "Developing and deploying custom ServiceNow applications on the Now Platform to streamline enterprise IT service management workflows for internal stakeholders.",
-      "Automating business processes using Flow Designer, Business Rules and Script Includes in JavaScript, reducing manual ticket handling and turnaround time.",
-      "Building integrations between ServiceNow and external enterprise systems using REST APIs and IntegrationHub, ensuring reliable data flow across platforms.",
+      "Build and ship custom ServiceNow apps that IT teams use to manage their service requests.",
+      "Automate ticket handling with Flow Designer, Business Rules and JavaScript so fewer tickets need a person to touch them.",
+      "Connect ServiceNow to other company systems over REST APIs and IntegrationHub.",
     ],
     tags: ["ServiceNow", "JavaScript", "REST APIs", "IntegrationHub"],
   },
@@ -45,9 +45,9 @@ export const experience = [
     href: "https://www.frontlineinsurance.com",
     logo: "/logo-frontline.png",
     points: [
-      "Streamlined internal operations by engineering a full-stack time management application, cutting admin overhead for project hour allocation by 20%.",
-      "Enhanced productivity 30% by integrating AI-driven automation workflows with Windsurf, automating project management tasks and status updates.",
-      "Ensured data integrity for sensitive insurance workflows by designing a normalized relational schema in PostgreSQL to handle employee logs and projects.",
+      "Built a full-stack time tracking app that cut the admin work of allocating project hours by 20%.",
+      "Automated project status updates and routine management tasks with Windsurf, saving the team about 30% of that time.",
+      "Designed the PostgreSQL schema for employee logs and projects.",
     ],
     tags: ["Node.js", "PostgreSQL", "Windsurf"],
   },
@@ -59,9 +59,9 @@ export const experience = [
     href: "https://www.frontlineinsurance.com",
     logo: "/logo-frontline.png",
     points: [
-      "Developed automated test scripts in TypeScript using Playwright for insurance claim filing and policy creation.",
-      "Collaborated with cross-functional teams to integrate automated testing into the CI/CD pipeline.",
-      "Enhanced testing efficiency for claim systems, reducing manual testing effort.",
+      "Wrote automated browser tests in TypeScript and Playwright for filing claims and creating policies.",
+      "Worked with the dev teams to run those tests in the CI/CD pipeline.",
+      "Cut down the manual testing the claims team had to do by hand.",
     ],
     tags: ["TypeScript", "Playwright", "CI/CD"],
   },
@@ -72,9 +72,9 @@ export const experience = [
     period: "May 2022 — Aug 2022",
     logo: "/logo-cgi.png",
     points: [
-      "Optimized seafloor mapping by developing Python-based data processing scripts, reducing data interpretation time by 25%.",
-      "Achieved 90% prediction accuracy analyzing unknown terrain by implementing and tuning XGBoost machine learning models.",
-      "Developed data visualizations of seafloor terrain predictions to help others see correlations between datasets.",
+      "Wrote Python scripts to process seafloor mapping data, cutting interpretation time by 25%.",
+      "Trained and tuned XGBoost models that predicted unknown terrain with 90% accuracy.",
+      "Made charts of the terrain predictions so the team could see how the datasets related.",
     ],
     tags: ["Python", "XGBoost", "Machine Learning"],
   },
@@ -144,9 +144,9 @@ export const projects = [
     group: "quant",
     featured: true,
     blurb:
-      "Cross-venue arbitrage, market making and series pricing across Kalshi and Polymarket esports markets, tested against real order books, the public trade tape and actual settlements.",
+      "A bot that watches esports betting markets on Kalshi and Polymarket and looks for prices that don't line up. Tested against real order books, real trades and real match results.",
     detail:
-      "12.9% of snapshots showed an arbitrage before fees and 2.8% after, almost always one contract deep. Quoting instead of taking earned 2.8c per contract out of sample across 589 matches, and lost 6.2c per contract inside two hours of the start, where the flow is informed. Streaming both venues over websockets, 97% of arbitrages were gone within a minute. A linear program over best-of-three outcomes found a $92 basket that pays the same whoever wins. Pricing Kalshi\u2019s map and totals markets off the match price found no edge \u2014 the model is calibrated but noisier than the market, and where they disagree the market is closer to the outcome. 83 tests.",
+      "About 13% of the time the two sites disagreed enough that you could lock in a profit before fees. After fees that fell to 3%, and usually only for a single contract. Posting my own prices instead of taking theirs made about 3 cents a contract over 589 matches, but lost 6 cents a contract in the first two hours of a match, when the people trading know something you don't. Most price gaps closed within a minute. I also found a $92 basket of bets on a best-of-three that paid the same no matter who won. My own model for the map and total-maps markets did not beat the market price, so I say so. 83 tests.",
     image: "/proj-esports.png",
     imageAlt:
       "Cumulative market-making profit across 1,177 esports matches, with the out-of-sample half marked",
@@ -160,9 +160,9 @@ export const projects = [
     group: "quant",
     featured: true,
     blurb:
-      "An event-driven backtester wired to a price-time priority matching engine, so a fill price is something the book prints rather than something a formula assumes. Every backtester charges you basis points for slippage; this one can walk a real order book instead.",
+      "A backtester that sends its orders into a simulated order book instead of guessing what a trade would cost. Most backtesters charge a flat fee for slippage. This one looks at what is actually resting in the book.",
     detail:
-      "The two halves were separate projects with the same hole in them. Routing orders into the engine showed the standard flat 2bp charge is wrong in both directions — five times too expensive for an order the touch absorbs, fourteen times too cheap for one that walks 151 price levels. Giving the book a realistic depth profile, thin at the touch and thicker behind it, moved the crossover five times earlier, from $408M of SPY to $77M. Then letting depth thin when volatility rises found the result I would actually lead with: the book averages its normal depth across the whole sample and a fifth less on the bars this strategy chose to trade, because a moving-average crossover fires when a trend breaks and a trend breaking is a volatility event. Its fills land at the 64th percentile of realized vol, costs run 19% above what the constant-depth book charged, and four fifths of that is the timing rather than the size — checked against a constant book held at the same average depth. Then letting the far book empty out, as a real one does, moved the same crossover twenty times the other way, from 0.4% of a day's volume to 7% — so the headline number is a function of a depth profile with two free parameters, not a measurement, and the dearest profile is the one that ships because it is the one that cannot flatter the strategy. Giving the book a memory, so a slice pays for the slices before it, turned the last open question around: the book had been pricing fills above the square-root formula at every size, and the suspect was the permanent impact the formula has and a book rebuilt every bar does not. It isn’t. Permanent impact is not a cost to a round trip — the entry pays it and the exit gets it back — so the formula was charging it on both legs. What the formula’s unpublished constant actually describes is a book that heals in about a week and keeps half of what you moved. None of the corrections moved the capacity answer by a share, because what strands capital above $5bn is the participation cap and a cap is not a cost. Knowing which of your numbers are load-bearing is most of what a fill model is for. 327 tests across the matching engine, the backtester and the bridge.",
+      "I built a matching engine (the part of an exchange that pairs buyers with sellers) and a backtester, then wired them together so every trade gets filled by the book. The usual flat slippage charge turned out to be wrong both ways: about 5x too expensive for small orders and 14x too cheap for big ones. Then I made the book more realistic one step at a time. Thin near the best price and thicker behind it. Shallower on volatile days, which matters because the strategy I tested trades on exactly those days and pays 19% more than a fixed book would say. Emptier far from the price. And a memory of what you traded yesterday, so a big order pays for its own earlier pieces. Every step changed what a trade costs. None of them changed how much money the strategy could run, because that limit comes from how much of the day's volume you are allowed to be, not from cost. That was the real lesson: knowing which of your numbers depend on your assumptions and which don't. 327 tests.",
     image: "/proj-backtest.png",
     imageAlt:
       "SPY equity curves against buy and hold, and the emergent spread distribution from the order book",
@@ -176,9 +176,9 @@ export const projects = [
     group: "quant",
     featured: true,
     blurb:
-      "Three alpha sleeves — 930 cointegrated equity pairs, the variance risk premium harvested by delta-hedging short options, and cross-sectional momentum on the same universe — plus the full risk-allocation stack that decides how much of each to hold. Mean-variance, shrinkage, risk parity, CVaR, a factor model and hierarchical risk parity, all tested out of sample.",
+      "Three trading strategies and the system that decides how much money each one gets. Pairs trading on 930 pairs of stocks, selling options and hedging them, and momentum. Then six ways of splitting money between them, all tested on data the models had not seen.",
     detail:
-      "The allocator had only ever been tested on assets, where equal weighting beat it at every estimation window. Pointed at two strategies that correlate +0.03, mean-variance finally wins — by more than a full unit of Sharpe, and not for the reason the textbook predicts. It wins because one sleeve loses money and only mean-variance can see it: risk parity, inverse vol, HRP and min variance never read an expected return, and the losing sleeve is the quieter one, so all four allocate 37–43% toward it. Charging the option sleeve the bid-ask it had been selling through sharpens that: the weights of all four sit unchanged at every spread, including the ones where the other sleeve loses 6.5% a year. A method that never reads a return cannot notice that what it funds has stopped working. The option spread now widens with VIX, as a real one does, and that barely costs anything — the premium sold scales with volatility too, so the spread stays 0.57% of it in calm, normal and violent months alike. The constant charge was the regime-dependent one. Run next to the order book in the simulation stack, where the same correction cost 19% because the trade size is fixed while the liquidity moves, it gives one line worth more than either project on its own: a cost’s co-movement with volatility bites you only to the extent your position size does not co-move with it. Adding a momentum sleeve, because two sleeves is not a portfolio, said more about the other two than about allocation: it correlates −0.46 with the pairs book, which is long laggards and short leaders — the same trade with the sign flipped — and equal weighting, which had won every table, loses by 0.8 of Sharpe the moment one sleeve is ten times the scale of the others. 1/N only ever meant equal risk. Regressing the sleeves on each other put numbers on that: a fifth of the pairs book’s variance is a short-momentum tilt (beta −0.04, t −3.4), and hedging it out would have made the sleeve worse, because momentum lost money over the window and the pairs book was being paid to be short it. The momentum book itself, built a dollar long against a dollar short, carries a market beta of −0.47 — after a drawdown the short leg is the high-beta names — which is where its whole loss came from. Dollar-neutral is not beta-neutral. 293 tests.",
+      "Textbooks say a smart optimizer should beat splitting money evenly. On normal assets like ETFs and stocks it did not, at any setting I tried. Even splits won every time. On trading strategies it finally did, but not for the textbook reason: one strategy was losing money, and only the optimizer that looks at returns could tell. The risk-based methods only look at how bumpy a strategy is, and the losing one was the calmest, so they put more money into it. Adding a momentum strategy showed my pairs strategy was quietly a bet against momentum, about a fifth of its ups and downs. And the momentum strategy, which was built to be market-neutral, was really half a dollar short the market. That is where all of its losses came from. Even splits also lost for the first time, because one strategy was ten times bigger than the others, and equal only works when the pieces are the same size. 293 tests.",
     image: "/proj-portfolio.png",
     imageAlt:
       "Efficient frontier with the candidate portfolios plotted against individual assets",

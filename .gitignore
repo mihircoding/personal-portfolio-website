@@ -26,3 +26,6 @@ dist-ssr
 .env.local
 # Files the Claude desktop app drops here
 Claude outputs/
+
+# Generated from posts/*.md on every build (scripts/blog)
+/blog/

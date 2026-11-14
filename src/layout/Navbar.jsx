@@ -6,6 +6,7 @@ import { profile } from "@/data/site";
 const links = [
   { label: "Home", href: "/", match: "home" },
   { label: "Projects", href: "/projects/", match: "projects" },
+  { label: "Blog", href: "/blog/", match: "blog" },
   { label: "Experience", href: "/#experience", match: "experience" },
   { label: "Resume", href: profile.resume, match: "resume", external: true },
 ];

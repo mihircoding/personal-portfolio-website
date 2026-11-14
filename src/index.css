@@ -43,6 +43,9 @@
   --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
     Consolas, monospace;
 
+  --font-serif: "Source Serif 4", Charter, Georgia, Cambria, "Times New Roman",
+    serif;
+
   --radius: 0.5rem;
 }
 
@@ -105,3 +108,76 @@
     }
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Blog. Post bodies are generated from Markdown (scripts/blog), so they are
+   styled by element here rather than with utility classes.
+   --------------------------------------------------------------------------- */
+.filter-chip[aria-pressed="true"] {
+  color: hsl(var(--foreground));
+  border-color: hsl(var(--foreground));
+}
+
+.post-body {
+  font-family: var(--font-serif);
+  font-size: 1.1875rem;
+  line-height: 1.75;
+  color: hsl(var(--foreground) / 0.9);
+  overflow-wrap: break-word;
+}
+.post-body > * + * { margin-top: 1.5rem; }
+.post-body h2,
+.post-body h3 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: hsl(var(--foreground));
+}
+.post-body h2 { font-size: 1.5rem; margin-top: 2.75rem; }
+.post-body h3 { font-size: 1.2rem; margin-top: 2.25rem; }
+.post-body h2 + *, .post-body h3 + * { margin-top: 0.75rem; }
+.post-body a { text-decoration: underline; text-underline-offset: 3px; }
+.post-body strong { font-weight: 600; color: hsl(var(--foreground)); }
+.post-body ul, .post-body ol { padding-left: 1.5rem; }
+.post-body ul { list-style: disc; }
+.post-body ol { list-style: decimal; }
+.post-body li + li { margin-top: 0.5rem; }
+.post-body blockquote {
+  border-left: 3px solid hsl(var(--foreground));
+  padding-left: 1.25rem;
+  font-style: italic;
+}
+.post-body hr { border-color: hsl(var(--border)); margin: 2.5rem 0; }
+.post-body img { border-radius: var(--radius); max-width: 100%; }
+.post-body table {
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  border-collapse: collapse;
+}
+.post-body th, .post-body td {
+  border: 1px solid hsl(var(--border));
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+.post-body :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background-color: hsl(var(--muted));
+  border-radius: 0.25rem;
+  padding: 0.15em 0.35em;
+}
+.post-body pre {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.65;
+  background-color: hsl(var(--muted));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+}
+.post-body pre code { font-family: inherit; }
+.post-body pre span { color: var(--shiki-light); }
+.dark .post-body pre span { color: var(--shiki-dark); }

@@ -10,7 +10,7 @@ import { renderIndex, renderPost } from "./render.mjs";
 export async function generateBlog({ root, includeDrafts = false }) {
   const outDir = path.join(root, "blog");
   const posts = loadPosts(path.join(root, "posts"), { includeDrafts });
-  const md = await createMarkdown();
+  const md = await createMarkdown({ figuresDir: path.join(root, "posts", "figures") });
 
   try {
     fs.rmSync(outDir, { recursive: true, force: true });

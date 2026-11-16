@@ -5,7 +5,7 @@ tags: [cpp]
 summary: One sentence shown under the title.
 ---
 Copy this file, name it YYYY-MM-DD-short-name.md, and write below.
-Tags: cpp, os, apps (one or more). Add `draft: true` to keep it unpublished.
+Tags: cpp, os (one or more). Add `draft: true` to keep it unpublished.
 
 ## A heading
 

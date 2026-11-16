@@ -181,3 +181,61 @@
 .post-body pre code { font-family: inherit; }
 .post-body pre span { color: var(--shiki-light); }
 .dark .post-body pre span { color: var(--shiki-dark); }
+
+/* Diagrams inlined from posts/figures/*.svg. Shapes use these classes so the
+   same file reads in light and dark mode. */
+.post-body .diagram { margin-top: 2rem; margin-bottom: 2rem; }
+.diagram-frame {
+  overflow-x: auto;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background-color: hsl(var(--card));
+  padding: 1.25rem 1rem;
+}
+.diagram svg {
+  display: block;
+  width: 100%;
+  min-width: 34rem;
+  height: auto;
+  margin: 0 auto;
+  font-family: var(--font-sans);
+}
+.diagram svg.narrow { min-width: 20rem; max-width: 30rem; }
+.diagram figcaption {
+  margin-top: 0.75rem;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: hsl(var(--muted-foreground));
+  text-align: center;
+}
+.diagram {
+  --job-a: 217 72% 56%;
+  --job-b: 32 88% 52%;
+  --job-c: 158 55% 40%;
+  --job-d: 276 45% 58%;
+}
+.dark .diagram {
+  --job-a: 217 70% 60%;
+  --job-b: 32 80% 55%;
+  --job-c: 158 45% 45%;
+  --job-d: 276 45% 64%;
+}
+.diagram .fg { fill: hsl(var(--foreground)); }
+.diagram .mu { fill: hsl(var(--muted-foreground)); }
+.diagram .on { fill: #fff; }
+.diagram .ln { stroke: hsl(var(--border)); fill: none; }
+.diagram .ax { stroke: hsl(var(--muted-foreground)); fill: none; }
+.diagram .st { stroke: hsl(var(--foreground)); fill: none; }
+.diagram .bx { fill: hsl(var(--card)); stroke: hsl(var(--border)); }
+.diagram .mb { fill: hsl(var(--muted)); stroke: hsl(var(--border)); }
+.diagram .ink { fill: hsl(var(--foreground)); }
+.diagram .ja { fill: hsl(var(--job-a)); }
+.diagram .jb { fill: hsl(var(--job-b)); }
+.diagram .jc { fill: hsl(var(--job-c)); }
+.diagram .jd { fill: hsl(var(--job-d)); }
+.diagram .sa { stroke: hsl(var(--job-a)); fill: none; }
+.diagram .sb { stroke: hsl(var(--job-b)); fill: none; }
+.diagram .red { fill: hsl(0 68% 52%); }
+.diagram .blk { fill: hsl(var(--foreground)); }
+.diagram .blk-t { fill: hsl(var(--background)); }

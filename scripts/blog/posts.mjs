@@ -8,7 +8,6 @@ export const BLOG_START = "2026-11-12";
 export const TAGS = {
   cpp: "C++",
   os: "Operating Systems",
-  apps: "Building Apps",
 };
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -53,7 +52,8 @@ export function loadPosts(dir, { includeDrafts = false } = {}) {
     if (data.draft && !includeDrafts) continue;
 
     if (!data.title) throw new Error(`${file}: missing "title"`);
-    const date = toIsoDate(data.date, file);
+    // No date = notes from before the daily log; listed after every day.
+    const date = data.date == null ? null : toIsoDate(data.date, file);
     const tags = [].concat(data.tags ?? []).map(String);
     for (const t of tags) {
       if (!TAGS[t]) {
@@ -75,13 +75,14 @@ export function loadPosts(dir, { includeDrafts = false } = {}) {
       date,
       tags,
       summary: data.summary ? String(data.summary) : "",
-      day: dayNumber(date),
+      day: date ? dayNumber(date) : null,
       minutes: readMinutes(content),
       body: content,
     });
   }
 
   return posts.sort(
-    (a, b) => b.date.localeCompare(a.date) || a.slug.localeCompare(b.slug)
+    (a, b) =>
+      (b.date ?? "").localeCompare(a.date ?? "") || a.slug.localeCompare(b.slug)
   );
 }

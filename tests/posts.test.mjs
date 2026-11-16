@@ -16,10 +16,10 @@ const dirWith = (files) => {
 };
 const post = (fm, body = "hello") => `---\n${fm}\n---\n${body}\n`;
 
-test("day numbers count from Nov 12", () => {
-  assert.equal(dayNumber("2026-11-12"), 1);
-  assert.equal(dayNumber("2026-11-14"), 3);
-  assert.equal(dayNumber("2027-03-15"), 124); // across a DST change
+test("day numbers count from Nov 16", () => {
+  assert.equal(dayNumber("2026-11-16"), 1);
+  assert.equal(dayNumber("2026-11-18"), 3);
+  assert.equal(dayNumber("2027-03-15"), 120); // across a DST change
 });
 
 test("posts sort newest first, drafts and _files are skipped", () => {

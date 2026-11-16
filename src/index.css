@@ -214,12 +214,14 @@
   --job-b: 32 88% 52%;
   --job-c: 158 55% 40%;
   --job-d: 276 45% 58%;
+  --job-e: 340 62% 54%;
 }
 .dark .diagram {
   --job-a: 217 70% 60%;
   --job-b: 32 80% 55%;
   --job-c: 158 45% 45%;
   --job-d: 276 45% 64%;
+  --job-e: 340 58% 62%;
 }
 .diagram .fg { fill: hsl(var(--foreground)); }
 .diagram .mu { fill: hsl(var(--muted-foreground)); }
@@ -234,6 +236,7 @@
 .diagram .jb { fill: hsl(var(--job-b)); }
 .diagram .jc { fill: hsl(var(--job-c)); }
 .diagram .jd { fill: hsl(var(--job-d)); }
+.diagram .je { fill: hsl(var(--job-e)); }
 .diagram .sa { stroke: hsl(var(--job-a)); fill: none; }
 .diagram .sb { stroke: hsl(var(--job-b)); fill: none; }
 .diagram .red { fill: hsl(0 68% 52%); }

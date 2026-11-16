@@ -7,7 +7,7 @@ import path from "node:path";
 const out = process.argv[2] ?? path.join(import.meta.dirname, "../../posts/figures");
 fs.mkdirSync(out, { recursive: true });
 
-const J = { A: "ja", B: "jb", C: "jc", D: "jd" };
+const J = { A: "ja", B: "jb", C: "jc", D: "jd", E: "je" };
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const t = (x, y, s, { cls = "fg", size = 13, anchor = "start", weight = 400 } = {}) =>
   `<text x="${x}" y="${y}" class="${cls}" font-size="${size}" text-anchor="${anchor}"${weight !== 400 ? ` font-weight="${weight}"` : ""}>${esc(s)}</text>`;
@@ -23,12 +23,13 @@ const arrow = (name, x1, y1, x2, y2, cls = "st", dash = false) =>
   `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="${cls}" stroke-width="1.4"${dash ? ' stroke-dasharray="4 3"' : ""} marker-end="url(#arr-${name})"/>`;
 
 // Gantt chart. rows: [{label, blocks: [[job, start, end]]}]
-function gantt(name, { rows, tmax, ticks, arrivals = [], vlines = [], stats = [], label, rowH = 34, gap = 10, L = 70, W = 640, notes = [] }) {
+// pre/preH: extra drawing (e.g. queues) placed above the timeline.
+function gantt(name, { rows, tmax, ticks, arrivals = [], vlines = [], stats = [], label, rowH = 34, gap = 10, L = 70, W = 640, pre = "", preH = 0, xlabel = "Time (ms)" }) {
   const R = 20;
-  const top = arrivals.length ? 34 : vlines.some((v) => v.label) ? 26 : 12;
+  const top = preH + (arrivals.length ? 34 : vlines.some((v) => v.label) ? 26 : 12);
   const sx = (W - L - R) / tmax;
   const X = (v) => L + v * sx;
-  let b = "";
+  let b = pre;
   rows.forEach((row, i) => {
     const y = top + i * (rowH + gap);
     b += `<rect x="${L}" y="${y}" width="${W - L - R}" height="${rowH}" class="mb" rx="3"/>`;
@@ -39,6 +40,7 @@ function gantt(name, { rows, tmax, ticks, arrivals = [], vlines = [], stats = []
       if (w >= 12) b += t(X(s) + w / 2, y + rowH / 2 + 4.5, job, { anchor: "middle", cls: "on", size: w >= 20 ? 13 : 11, weight: 600 });
     }
     if (row.note) b += t(W - R - 8, y + rowH / 2 + 4.5, row.note, { anchor: "end", cls: "mu", size: 12 });
+    if (row.idle) b += t((L + W - R) / 2, y + rowH / 2 + 4.5, row.idle, { anchor: "middle", cls: "mu", size: 12 });
   });
   const bottom = top + rows.length * (rowH + gap) - gap;
   for (const v of vlines) {
@@ -46,8 +48,8 @@ function gantt(name, { rows, tmax, ticks, arrivals = [], vlines = [], stats = []
     if (v.label) b += t(X(v.t), top - 10, v.label, { anchor: "middle", cls: "mu", size: 11 });
   }
   for (const a of arrivals) {
-    b += arrow(name, X(a.t), 8, X(a.t), top - 2);
-    b += t(X(a.t) + 6, 16, a.label, { cls: "mu", size: 11 });
+    b += arrow(name, X(a.t), preH + 8, X(a.t), top - 2);
+    b += t(X(a.t) + 6, preH + 16, a.label, { cls: "mu", size: 11 });
   }
   const ay = bottom + 12;
   b += `<line x1="${L}" y1="${ay}" x2="${W - R}" y2="${ay}" class="ax"/>`;
@@ -55,8 +57,8 @@ function gantt(name, { rows, tmax, ticks, arrivals = [], vlines = [], stats = []
     b += `<line x1="${X(v)}" y1="${ay}" x2="${X(v)}" y2="${ay + 5}" class="ax"/>`;
     b += t(X(v), ay + 19, v, { anchor: "middle", cls: "mu", size: 11 });
   }
-  b += t((L + W - R) / 2, ay + 37, "Time (ms)", { anchor: "middle", cls: "mu", size: 11 });
-  let y = ay + 62;
+  b += t((L + W - R) / 2, ay + (ticks.length ? 37 : 20), xlabel, { anchor: "middle", cls: "mu", size: 11 });
+  let y = ay + (ticks.length ? 62 : 45);
   for (const s of stats) {
     b += t(L, y, s, { size: 13 });
     y += 20;
@@ -372,4 +374,132 @@ gantt("mlfq-long-short", {
   b += t(W / 2, 270, "Each cache watches the bus. When CPU 0 writes D, CPU 1's cache sees it and drops (or updates) its copy.", { anchor: "middle", cls: "mu", size: 12 });
   svg(n, W, 282, b, { label: "Two CPUs with private caches share memory over a bus; bus snooping keeps the caches coherent" });
 }
+// ---- Chapter 10 (10.4–10.7), Day 1 post ----
+// "Q0 → (A) → (B) → NULL" drawn left to right. jobs: letters, or {job, ghost}.
+const queue = (name, x, y, label, jobs, { end, empty, gapX = 58 } = {}) => {
+  let b = t(x, y + 4.5, label, { size: 13, weight: 600 });
+  let cx = x + label.length * 7.5 + 16;
+  b += arrow(name, cx, y, cx + 22, y);
+  cx += 22 + 16;
+  if (empty) b += t(cx - 10, y + 4.5, empty, { cls: "mu", size: 12 });
+  jobs.forEach((j, i) => {
+    const job = typeof j === "string" ? j : j.job;
+    const ghost = typeof j === "object" && j.ghost;
+    if (i > 0) b += arrow(name, cx - gapX + 14, y, cx - 16, y);
+    b += ghost
+      ? `<circle cx="${cx}" cy="${y}" r="13" class="ln" stroke-width="1.5" stroke-dasharray="3 3"/>` + t(cx, y + 4.5, job, { anchor: "middle", cls: "mu", weight: 600 })
+      : `<circle cx="${cx}" cy="${y}" r="13" class="${J[job]}"/>` + t(cx, y + 4.5, job, { anchor: "middle", cls: "on", weight: 600 });
+    cx += gapX;
+  });
+  if (end) {
+    b += arrow(name, cx - gapX + 14, y, cx - 12, y);
+    b += t(cx - 8, y + 4.5, end, { cls: "mu", size: 12, weight: 600 });
+  }
+  return b;
+};
+const slots = (seq) => [...seq].map((j, i) => [j, i, i + 1]);
+
+gantt("sqms", {
+  label: "SQMS: one queue A to E shared by four CPUs; each job moves from CPU to CPU",
+  pre: queue("sqms", 20, 24, "Queue", ["A", "B", "C", "D", "E"], { end: "NULL" }),
+  preH: 52,
+  rows: [
+    { label: "CPU 0", blocks: slots("AEDCB"), note: "…" },
+    { label: "CPU 1", blocks: slots("BAEDC"), note: "…" },
+    { label: "CPU 2", blocks: slots("CBAED"), note: "…" },
+    { label: "CPU 3", blocks: slots("DCBAE"), note: "…" },
+  ],
+  tmax: 5.6, ticks: [], xlabel: "Time →", rowH: 30, gap: 8,
+});
+gantt("mqms-imbalance", {
+  label: "MQMS load imbalance: Q0 holds only A, Q1 holds B and D, so A gets twice the CPU",
+  pre: queue("mqms-imbalance", 20, 24, "Q0", ["A"]) + queue("mqms-imbalance", 260, 24, "Q1", ["B", "D"]),
+  preH: 52,
+  rows: [
+    { label: "CPU 0", blocks: slots("AAAAAAAA"), note: "…" },
+    { label: "CPU 1", blocks: slots("BBDDBBDD"), note: "…" },
+  ],
+  tmax: 8.6, ticks: [], xlabel: "Time →", rowH: 30, gap: 8,
+  stats: ["A gets 2× more CPU."],
+});
+gantt("mqms-idle", {
+  label: "After A finishes, Q0 is empty and CPU 0 sits idle while CPU 1 alternates B and D",
+  pre: queue("mqms-idle", 20, 24, "Q0", [], { empty: "(empty)" }) + queue("mqms-idle", 260, 24, "Q1", ["B", "D"]),
+  preH: 52,
+  rows: [
+    { label: "CPU 0", blocks: [], idle: "idle" },
+    { label: "CPU 1", blocks: slots("BBDDBBDD"), note: "…" },
+  ],
+  tmax: 8.6, ticks: [], xlabel: "Time →", rowH: 30, gap: 8,
+});
+{
+  const n = "migration";
+  const W = 640;
+  let b = "";
+  const panel = (x, title) =>
+    `<rect x="${x}" y="10" width="270" height="150" class="mb" rx="6"/>` + t(x + 14, 32, title, { cls: "mu", size: 12, weight: 600 });
+  b += panel(10, "Before");
+  b += panel(360, "After");
+  b += queue(n, 28, 70, "Q0", [], { empty: "(empty)" });
+  b += queue(n, 28, 124, "Q1", ["B", "D"]);
+  b += queue(n, 378, 70, "Q0", ["D"]);
+  b += queue(n, 378, 124, "Q1", ["B"]);
+  // Q0 peeks at Q1
+  b += `<line x1="210" y1="76" x2="210" y2="104" class="st" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#arr-${n})"/>`;
+  b += t(218, 94, "peek", { cls: "mu", size: 12 });
+  b += arrow(n, 288, 85, 354, 85);
+  b += t(321, 76, "migrate D", { anchor: "middle", size: 12, weight: 600 });
+  svg(n, W, 170, b, { label: "Migration: empty Q0 peeks at Q1 and steals job D" });
+}
+{
+  const n = "o1-scheduler";
+  const W = 640, top = 40, rh = 34;
+  let b = "";
+  b += t(150, 22, "Priority", { anchor: "end", cls: "mu", size: 12, weight: 600 });
+  b += t(170, 22, "Timeslice", { cls: "mu", size: 12, weight: 600 });
+  const widths = [250, 195, 145, 100, 60];
+  widths.forEach((w, i) => {
+    const y = top + i * rh;
+    const lbl = i === 0 ? "highest" : i === widths.length - 1 ? "lowest" : "";
+    if (lbl) b += t(150, y + 17, lbl, { anchor: "end", size: 12, weight: 600 });
+    else b += t(150, y + 17, "·", { anchor: "end", cls: "mu", size: 14 });
+    b += `<rect x="170" y="${y}" width="${w}" height="24" class="ja" rx="3" opacity="${1 - i * 0.14}"/>`;
+  });
+  const bottom = top + widths.length * rh - 10;
+  b += `<line x1="460" y1="${bottom}" x2="460" y2="${top + 2}" class="st" stroke-width="1.6" marker-end="url(#arr-${n})"/>`;
+  b += t(472, top + 14, "more time sleeping", { size: 12, weight: 600 });
+  b += t(472, top + 30, "→ more interactive", { cls: "mu", size: 12 });
+  b += t(472, top + 46, "→ boost priority", { cls: "mu", size: 12 });
+  b += `<line x1="448" y1="${top + 2}" x2="448" y2="${bottom}" class="ax" stroke-width="1.6" marker-end="url(#arr-${n})"/>`;
+  b += t(472, bottom - 36, "less time sleeping", { size: 12, weight: 600 });
+  b += t(472, bottom - 20, "→ less interaction", { cls: "mu", size: 12 });
+  b += t(472, bottom - 4, "→ less priority", { cls: "mu", size: 12 });
+  svg(n, W, bottom + 16, b, { label: "O(1) scheduler: higher priorities get longer timeslices; sleeping a lot boosts priority" });
+}
+{
+  const n = "bfs";
+  const W = 640;
+  let b = "";
+  b += t(20, 24, "One global queue, ordered by virtual deadline", { cls: "mu", size: 12, weight: 600 });
+  const tasks = [["A", 12], ["C", 15], ["B", 20], ["D", 31], ["E", 40]];
+  b += t(20, 74, "Queue", { size: 13, weight: 600 });
+  b += arrow(n, 76, 70, 100, 70);
+  tasks.forEach(([job, d], i) => {
+    const cx = 130 + i * 90;
+    if (i > 0) b += arrow(n, cx - 90 + 15, 70, cx - 16, 70);
+    b += `<circle cx="${cx}" cy="70" r="15" class="${J[job]}"/>`;
+    b += t(cx, 75, job, { anchor: "middle", cls: "on", weight: 600 });
+    b += t(cx, 104, `deadline ${d}`, { anchor: "middle", cls: "mu", size: 11 });
+  });
+  const cpu = (x, label) =>
+    `<rect x="${x}" y="150" width="120" height="38" class="bx" rx="5"/>` + t(x + 60, 174, label, { anchor: "middle", weight: 600 });
+  b += cpu(70, "CPU 0");
+  b += cpu(250, "CPU 1");
+  b += arrow(n, 130, 112, 130, 146);
+  b += arrow(n, 220, 112, 300, 146);
+  b += t(392, 174, "earliest virtual deadline first", { cls: "mu", size: 12 });
+  b += t(20, 222, "deadline = now + (priority ratio × rr_interval)", { size: 13, weight: 600 });
+  svg(n, W, 234, b, { label: "BFS: one global queue ordered by virtual deadline; each CPU takes the task with the earliest deadline" });
+}
+
 console.log(fs.readdirSync(out).join("\n"));

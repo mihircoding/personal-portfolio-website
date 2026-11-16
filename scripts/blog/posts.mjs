@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 
-export const BLOG_START = "2026-11-12";
+export const BLOG_START = "2026-11-16";
 
 export const TAGS = {
   cpp: "C++",

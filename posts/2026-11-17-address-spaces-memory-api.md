@@ -1,6 +1,6 @@
 ---
 title: "Address spaces and the memory API (OSTEP 13.2–14.4)"
-date: 2026-11-18
+date: 2026-11-17
 tags: [os]
 summary: "Why each process gets its own virtual address space, the goals of virtual memory, and stack vs. heap memory with malloc() and free()."
 ---

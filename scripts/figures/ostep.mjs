@@ -502,4 +502,53 @@ gantt("mqms-idle", {
   svg(n, W, 234, b, { label: "BFS: one global queue ordered by virtual deadline; each CPU takes the task with the earliest deadline" });
 }
 
+// ---- Chapter 13, Day 3 post ----
+// Memory drawn top to bottom. regions: [label, height, class, address at its top].
+// Free space uses "mb" (muted label); everything else is colored.
+const memStack = (regions, { x, w, top, end }) => {
+  let b = "";
+  let y = top;
+  const ys = [];
+  for (const [name, h, cls, addr] of regions) {
+    b += `<rect x="${x}" y="${y}" width="${w}" height="${h - 3}" class="${cls}" rx="3"/>`;
+    b += t(x + w / 2, y + (h - 3) / 2 + 4.5, name, { anchor: "middle", cls: cls === "mb" ? "mu" : "on", weight: 600 });
+    if (addr) b += t(x - 10, y + 4, addr, { anchor: "end", cls: "mu", size: 11 });
+    ys.push(y);
+    y += h;
+  }
+  if (end) b += t(x - 10, y - 3 + 4, end, { anchor: "end", cls: "mu", size: 11 });
+  return { b, ys, bottom: y - 3 };
+};
+{
+  const n = "memory-sharing";
+  const W = 360, x = 80, w = 200;
+  const { b, bottom } = memStack([
+    ["Operating system", 42, "jd"],
+    ["free", 42, "mb"],
+    ["Process C", 42, "jc"],
+    ["Process B", 42, "jb"],
+    ["free", 42, "mb"],
+    ["Process A", 42, "ja"],
+  ], { x, w, top: 32 });
+  const title = t(x + w / 2, 18, "Physical memory", { anchor: "middle", cls: "mu", size: 12, weight: 600 });
+  svg(n, W, bottom + 10, title + b, { narrow: true, label: "Physical memory shared by the OS and processes A, B and C, with free space between them" });
+}
+{
+  const n = "address-space";
+  const W = 380, x = 90, w = 200, freeH = 170;
+  let { b, ys, bottom } = memStack([
+    ["Program code", 42, "jc", "0KB"],
+    ["Heap", 42, "ja", "1KB"],
+    ["free", freeH, "mb", "2KB"],
+    ["Stack", 42, "jb", "15KB"],
+  ], { x, w, top: 32, end: "16KB" });
+  b = t(x + w / 2, 18, "Address space (virtual)", { anchor: "middle", cls: "mu", size: 12, weight: 600 }) + b;
+  const cx = x + w / 2, f = ys[2];
+  b += arrow(n, cx, f + 8, cx, f + 50);
+  b += t(cx + 10, f + 34, "heap grows", { cls: "mu", size: 11 });
+  b += arrow(n, cx, f + freeH - 11, cx, f + freeH - 53);
+  b += t(cx + 10, f + freeH - 27, "stack grows", { cls: "mu", size: 11 });
+  svg(n, W, bottom + 10, b, { narrow: true, label: "16KB address space: program code at 0KB, heap at 1KB growing down, free space, stack at 15KB growing up" });
+}
+
 console.log(fs.readdirSync(out).join("\n"));

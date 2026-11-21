@@ -551,7 +551,62 @@ const memStack = (regions, { x, w, top, end }) => {
   svg(n, W, bottom + 10, b, { narrow: true, label: "16KB address space: program code at 0KB, heap at 1KB growing down, free space, stack at 15KB growing up" });
 }
 
-// ---- Chapter 15, address translation post ----
+// ---- Chapter 14.4 + 15, address translation post ----
+{
+  const n = "memory-errors";
+  const panel = (x, title) =>
+    `<rect x="${x}" y="10" width="200" height="170" class="bx" rx="6"/>` +
+    t(x + 100, 34, title, { anchor: "middle", weight: 600 });
+  let b = panel(10, "Buffer overflow") + panel(220, "Memory leak") + panel(430, "Dangling pointer");
+  // Buffer overflow: 4 cells made, 2 more written past the end.
+  const cw = 26, cy = 78;
+  for (let i = 0; i < 6; i++)
+    b += `<rect x="${32 + i * cw}" y="${cy}" width="${cw - 2}" height="30" class="${i < 4 ? "ja" : "red"}" rx="2"/>`;
+  b += `<line x1="32" y1="${cy + 40}" x2="${32 + 4 * cw - 2}" y2="${cy + 40}" class="ax"/>`;
+  b += t(32 + 2 * cw, cy + 56, "allocated", { anchor: "middle", cls: "mu", size: 11 });
+  b += `<line x1="${32 + 4 * cw}" y1="${cy + 40}" x2="${32 + 6 * cw - 2}" y2="${cy + 40}" class="ax"/>`;
+  b += t(32 + 5 * cw, cy + 56, "overflow", { anchor: "middle", cls: "mu", size: 11 });
+  // Memory leak: heap filling with blocks that are never freed.
+  b += `<rect x="240" y="48" width="160" height="100" class="mb" rx="4"/>`;
+  b += t(248, 62, "heap", { cls: "mu", size: 11 });
+  [[250, 70], [292, 70], [334, 70], [250, 100], [292, 100], [334, 100], [250, 124]].forEach(([x, y]) => {
+    b += `<rect x="${x}" y="${y}" width="38" height="${y === 124 ? 18 : 24}" class="jb" rx="2"/>`;
+  });
+  b += t(320, 168, "not using free()", { anchor: "middle", cls: "mu", size: 11 });
+  // Dangling pointer: x still points at a freed block.
+  b += `<rect x="450" y="74" width="44" height="32" class="jc" rx="4"/>`;
+  b += t(472, 95, "x", { anchor: "middle", cls: "on", weight: 600 });
+  b += `<rect x="540" y="64" width="78" height="52" class="mb" rx="4" stroke-dasharray="4 3"/>`;
+  b += t(579, 95, "freed", { anchor: "middle", cls: "mu", weight: 600 });
+  b += arrow(n, 494, 90, 536, 90);
+  b += t(530, 160, "freed before finished", { anchor: "middle", cls: "mu", size: 11 });
+  b += t(530, 174, "using it", { anchor: "middle", cls: "mu", size: 11 });
+  svg(n, 640, 190, b, { label: "Buffer overflow: data written past the allocated cells. Memory leak: heap fills with blocks never freed. Dangling pointer: pointer x still points to freed memory" });
+}
+{
+  const n = "data-bss";
+  const lx = 70, rx = 400, w = 180, top = 32;
+  const left = memStack([
+    ["Code", 42, "jc"],
+    ["DATA", 42, "je"],
+  ], { x: lx, w, top });
+  const right = memStack([
+    ["Code", 42, "jc"],
+    ["DATA", 42, "je"],
+    ["BSS (filled with 0)", 42, "jd"],
+    ["Heap", 42, "ja"],
+    ["(free)", 60, "mb"],
+    ["Stack", 42, "jb"],
+  ], { x: rx, w, top });
+  let b = t(lx + w / 2, 18, "Executable file", { anchor: "middle", cls: "mu", size: 12, weight: 600 });
+  b += t(rx + w / 2, 18, "Memory", { anchor: "middle", cls: "mu", size: 12, weight: 600 });
+  b += left.b + right.b;
+  b += t(lx + w / 2, left.bottom + 22, "BSS values not stored", { anchor: "middle", cls: "mu", size: 11 });
+  const y = left.ys[1] + 19.5;
+  b += arrow(n, lx + w + 6, y, rx - 6, y);
+  b += t((lx + w + rx) / 2, y - 8, "copied into memory", { anchor: "middle", cls: "mu", size: 11 });
+  svg(n, 640, right.bottom + 10, b, { label: "The executable file holds code and DATA values; DATA is copied into memory, and BSS in memory is filled with 0 without being stored in the file" });
+}
 {
   const n = "relocation";
   const W = 640, lx = 70, rx = 400, w = 180, top = 32;

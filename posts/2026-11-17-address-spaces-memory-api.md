@@ -4,7 +4,7 @@ date: 2026-11-17
 tags: [os]
 summary: "Why each process gets its own virtual address space, the goals of virtual memory, and stack vs. heap memory with malloc() and free()."
 ---
-## 13.2 + 13.3: Address spaces
+## 13.2 + 13.3
 
 - Interactivity → multiple users waiting for their tasks' completion.
 - Time sharing → sharing memory between multiple processes.
@@ -26,19 +26,19 @@ An example 16KB address space. The heap grows down and the stack grows up into t
 
 This is an abstraction from the OS, because 0KB is not the actual address in memory; it's the virtual address with respect to this process. ← Called **virtualizing memory**.
 
-## 13.4: Goals of a virtual memory system
+## 13.4
 
 1. **Transparency** → implement VM so it's invisible to the running program.
 2. **Efficiency** → in time + space → rely on hardware.
 3. **Protection** → protect processes from one another → isolation is good.
 
-## 14.1: Stack vs. heap memory
+## 14.1
 
-Stack memory → allocations + deallocations managed by the compiler.
+Stack memory → allocations + deallocation managed by the compiler.
 
 ```c
 void func() {
-    int x; // makes sure there's space, then allocates it on the stack
+    int x; // makes sure there's space and then allocates on stack
 }
 ```
 
@@ -50,23 +50,23 @@ void func() {
 }
 ```
 
-- `int *x` → compiler makes space for a pointer to an int.
-- `malloc(sizeof(int))` → requests space for an int on the heap.
+- `int *x` → compiler makes space for pointer to int.
+- `malloc(sizeof(int))` → requests space for int on heap.
 
-## 14.2: malloc()
+## 14.2
 
-- `sizeof()` → compile-time operator → size known at compile time.
-- `malloc(strlen(s) + 1)` → the + 1 allocates room for the end-of-string character.
+- `malloc()` ← compile time operator → size known at compile time.
+- `malloc(strlen(s) + 1)` ← allocating for end of string char.
 
 ```c
 int *x = malloc(10 * sizeof(int));
 printf("%d\n", sizeof(x)); // 4 or 8
 ```
 
-This prints the size of `x` (a pointer), not the memory allocated.
+↳ Prints the size of `x`, not the memory allocated.
 
-## 14.3 + 14.4: free()
+## 14.3 + 14.4
 
-`free()` → takes 1 argument (the pointer from `malloc`) → the library tracks the amount of memory to free from the heap.
+`free()` → takes 1 argument → tracks the amount of memory to free from heap.
 
 In more modern languages, garbage collectors handle this.

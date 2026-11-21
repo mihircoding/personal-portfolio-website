@@ -551,4 +551,55 @@ const memStack = (regions, { x, w, top, end }) => {
   svg(n, W, bottom + 10, b, { narrow: true, label: "16KB address space: program code at 0KB, heap at 1KB growing down, free space, stack at 15KB growing up" });
 }
 
+// ---- Chapter 15, address translation post ----
+{
+  const n = "relocation";
+  const W = 640, lx = 70, rx = 400, w = 180, top = 32;
+  const left = memStack([
+    ["Code", 42, "jc", "0KB"],
+    ["Heap", 42, "ja", "2KB"],
+    ["(free)", 206, "mb", "4KB"],
+    ["Stack", 50, "jb", "14KB"],
+  ], { x: lx, w, top, end: "16KB" });
+  const right = memStack([
+    ["OS", 60, "jd", "0KB"],
+    ["not in use", 60, "mb", "16KB"],
+    ["Code", 30, "jc", "32KB"],
+    ["Heap", 30, "ja"],
+    ["allocated, not in use", 80, "mb"],
+    ["Stack", 30, "jb"],
+    ["not in use", 50, "mb", "48KB"],
+  ], { x: rx, w, top, end: "64KB" });
+  let b = t(lx + w / 2, 18, "Address space (virtual)", { anchor: "middle", cls: "mu", size: 12, weight: 600 });
+  b += t(rx + w / 2, 18, "Physical memory", { anchor: "middle", cls: "mu", size: 12, weight: 600 });
+  b += left.b + right.b;
+  const cx = lx + w / 2, f = left.ys[2];
+  b += arrow(n, cx, f + 10, cx, f + 52);
+  b += arrow(n, cx, f + 196, cx, f + 154);
+  b += t(lx + 10, left.ys[3] + 15, "3000", { cls: "on", size: 11 });
+  const mid = (right.ys[2] + right.ys[6] - 3) / 2;
+  b += arrow(n, lx + w + 6, f + 103, rx - 6, mid);
+  svg(n, W, left.bottom + 10, b, { label: "A 16KB address space (code, heap, free, stack) relocated into 64KB of physical memory between 32KB and 48KB; the OS sits at 0KB to 16KB" });
+}
+{
+  const n = "base-bounds";
+  const W = 640, y = 62, h = 48;
+  const box = (x, bw, cls, title, sub) =>
+    `<rect x="${x}" y="${y}" width="${bw}" height="${h}" class="${cls}" rx="5"/>` +
+    t(x + bw / 2, y + 20, title, { anchor: "middle", cls: "on", size: 12, weight: 600 }) +
+    t(x + bw / 2, y + 37, sub, { anchor: "middle", cls: "on", size: 11 });
+  let b = `<rect x="170" y="40" width="300" height="90" class="bx" rx="6" stroke-dasharray="5 4"/>`;
+  b += t(180, 33, "Memory management unit (MMU), on the CPU", { cls: "mu", size: 12, weight: 600 });
+  b += box(10, 130, "ja", "Virtual address", "15KB");
+  b += box(185, 125, "jc", "Bounds register", "16KB");
+  b += box(330, 125, "jd", "Base register", "32KB");
+  b += box(500, 130, "jb", "Physical address", "32 + 15 = 47KB");
+  b += arrow(n, 140, y + h / 2, 181, y + h / 2);
+  b += arrow(n, 310, y + h / 2, 326, y + h / 2);
+  b += arrow(n, 455, y + h / 2, 496, y + h / 2);
+  b += arrow(n, 247, y + h, 247, 158);
+  b += t(247, 176, "VA more than 16KB → error", { anchor: "middle", cls: "fg", size: 12, weight: 600 });
+  svg(n, W, 188, b, { label: "Virtual address 15KB passes the bounds check (16KB), then the base 32KB is added to give physical address 47KB; a virtual address over 16KB raises an error" });
+}
+
 console.log(fs.readdirSync(out).join("\n"));

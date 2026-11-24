@@ -9,7 +9,7 @@ Each page under `/blog/` comes from one Markdown file in `posts/`.
 2. Fill in `title`, `date`, `tags` (`cpp`, `os`) and `summary`, then write the page below the `---`.
 3. Commit and push to `main`. The page goes live at `/blog/short-name/`.
 
-Leave out `date` for notes that don't belong to a day (they show as "Earlier notes" after all the days, e.g. `posts/ostep-notes.md`).
+Leave out `date` for notes from before the blog started (they show as "Earlier notes" after all dated posts, e.g. `posts/ostep-notes.md`).
 
 Diagrams: put an SVG in `posts/figures/` and add a fenced block whose language is `figure`. The first line is the file name without `.svg`, the rest is the caption:
 

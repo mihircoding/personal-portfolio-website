@@ -68,7 +68,7 @@ const tagPills = (tags) =>
 
 const meta = (post) =>
   post.date
-    ? `Day ${post.day} · ${formatDate(post.date)} · ${post.minutes} min read`
+    ? `${formatDate(post.date)} · ${post.minutes} min read`
     : `Earlier notes · ${post.minutes} min read`;
 
 const indexItem = (post) => `
@@ -94,11 +94,11 @@ export function renderIndex(posts) {
   return page({
     title: `Blog — ${AUTHOR}`,
     description:
-      "A daily log of what Mihir Konda is learning in C++ and operating systems.",
+      "A log of what Mihir Konda is learning in C++ and operating systems.",
     url: "/blog/",
     body: `      <main class="mx-auto w-full max-w-[680px] px-6 py-12 sm:py-16">
         <h1 class="text-3xl font-bold leading-none tracking-tighter sm:text-5xl">Blog</h1>
-        <p class="mt-3 text-sm leading-7 text-muted-foreground">One page a day on what I'm learning in C++ and operating systems.</p>
+        <p class="mt-3 text-sm leading-7 text-muted-foreground">Notes on what I'm learning in C++ and operating systems.</p>
         <div class="mt-8 flex gap-6 overflow-x-auto border-b border-border/60">
           ${[chip("all", "All"), ...Object.entries(TAGS).map(([k, v]) => chip(k, v))].join("\n          ")}
         </div>
@@ -120,7 +120,7 @@ export function renderPost(post, html, { older, newer } = {}) {
     title: `${post.title} — ${AUTHOR}`,
     description:
       post.summary ||
-      (post.date ? `Day ${post.day} of a daily learning log.` : "Notes from a learning log."),
+      "Notes from a learning log.",
     url: `/blog/${post.slug}/`,
     body: `      <main class="mx-auto w-full max-w-[680px] px-6 py-12 sm:py-16">
         <article>
@@ -139,8 +139,8 @@ ${html}
           <div class="mt-10 flex flex-wrap gap-2">${tagPills(post.tags)}</div>
         </article>
         <nav class="mt-10 grid grid-cols-2 gap-6 border-t border-border/60 pt-6">
-          ${neighbor(older, older?.date ? "← Previous day" : "← Earlier notes", "text-left")}
-          ${neighbor(newer, newer?.date ? "Next day →" : "Next →", "text-right")}
+          ${neighbor(older, older?.date ? "← Previous post" : "← Earlier notes", "text-left")}
+          ${neighbor(newer, newer?.date ? "Next post →" : "Next →", "text-right")}
         </nav>
         <a href="/blog/" class="mt-10 inline-block text-xs text-muted-foreground transition-colors hover:text-foreground">← All entries</a>
       </main>`,

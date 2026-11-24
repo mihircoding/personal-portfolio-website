@@ -657,4 +657,185 @@ const memStack = (regions, { x, w, top, end }) => {
   svg(n, W, 188, b, { label: "Virtual address 15KB passes the bounds check (16KB), then the base 32KB is added to give physical address 47KB; a virtual address over 16KB raises an error" });
 }
 
+// ---- Chapter 16: Segmentation ----
+{
+  const n = "segments";
+  const lx = 70, rx = 450, w = 170, top = 32;
+  const left = memStack([
+    ["program code", 40, "jc", "0KB"],
+    ["", 40, "mb", "2KB"],
+    ["heap", 50, "ja", "4KB"],
+    ["", 170, "mb", "7KB"],
+    ["stack", 40, "jb", "14KB"],
+  ], { x: lx, w, top, end: "16KB" });
+  const right = memStack([
+    ["OS", 46, "jd", "0KB"],
+    ["not in use", 40, "mb", "16KB"],
+    ["stack", 34, "jb", "26KB"],
+    ["not in use", 34, "mb", "28KB"],
+    ["code", 34, "jc", "32KB"],
+    ["heap", 42, "ja", "34KB"],
+    ["not in use", 110, "mb", "37KB"],
+  ], { x: rx, w, top, end: "64KB" });
+  let b = t(lx + w / 2, 18, "Address space (virtual)", { anchor: "middle", cls: "mu", size: 12, weight: 600 });
+  b += t(rx + w / 2, 18, "Physical memory", { anchor: "middle", cls: "mu", size: 12, weight: 600 });
+  b += left.b + right.b;
+  const mid = (ys, i, h) => ys[i] + (h - 3) / 2;
+  b += arrow(n, lx + w + 6, mid(left.ys, 0, 40), rx - 50, mid(right.ys, 4, 34), "ax");
+  b += arrow(n, lx + w + 6, mid(left.ys, 2, 50), rx - 50, mid(right.ys, 5, 42), "ax");
+  b += arrow(n, lx + w + 6, mid(left.ys, 4, 40), rx - 50, mid(right.ys, 2, 34), "ax");
+  svg(n, 640, left.bottom + 10, b, { label: "Each segment of the 16KB address space (code, heap, stack) is placed separately in physical memory: code at 32KB, heap at 34KB, stack ending at 28KB" });
+}
+{
+  const n = "segment-bits";
+  const bits = "01000001101000", x0 = 68, cw = 36, y = 40;
+  let b = t(320, 24, "virtual address 4200", { anchor: "middle", weight: 600 });
+  [...bits].forEach((bit, i) => {
+    const seg = i < 2;
+    b += `<rect x="${x0 + i * cw}" y="${y}" width="${cw - 3}" height="34" class="${seg ? "jd" : "bx"}" rx="3"/>`;
+    b += t(x0 + i * cw + (cw - 3) / 2, y + 22, bit, { anchor: "middle", cls: seg ? "on" : "fg", weight: 600 });
+  });
+  const brace = (i0, i1, label) => {
+    const xa = x0 + i0 * cw, xb = x0 + (i1 + 1) * cw - 3;
+    return `<path d="M${xa} ${y + 44} V${y + 50} H${xb} V${y + 44}" class="ax" fill="none"/>` +
+      t((xa + xb) / 2, y + 68, label, { anchor: "middle", cls: "mu", size: 12 });
+  };
+  b += brace(0, 1, "01 = heap");
+  b += brace(2, 13, "offset: 4200 − 4096 = 104");
+  b += t(320, 152, "104 + 34K = 34920", { anchor: "middle", weight: 600 });
+  svg(n, 640, 166, b, { label: "Virtual address 4200 in binary: the top 2 bits 01 pick the heap segment and the remaining 12 bits are the offset 104; 104 plus base 34K gives 34920" });
+}
+{
+  const n = "stack-negative";
+  const bx = 260, bw = 140, y0 = 40, y1 = 160, ym = 100;
+  let b = t(bx + bw / 2, 24, "stack segment", { anchor: "middle", cls: "mu", size: 12, weight: 600 });
+  b += `<rect x="${bx}" y="${y0}" width="${bw}" height="${y1 - y0}" class="jb" rx="3"/>`;
+  b += `<line x1="${bx}" y1="${ym}" x2="${bx + bw}" y2="${ym}" class="st" stroke-dasharray="4 3"/>`;
+  b += t(bx - 10, y0 + 4, "26KB", { anchor: "end", cls: "mu", size: 11 });
+  b += t(bx - 10, ym + 4, "27KB", { anchor: "end", cls: "mu", size: 11 });
+  b += t(bx - 10, y1 + 4, "28KB", { anchor: "end", cls: "mu", size: 11 });
+  b += t(bx + bw / 2, y1 + 24, "base = 28KB", { anchor: "middle", cls: "mu", size: 12 });
+  b += t(20, ym - 6, "access 15KB", { weight: 600 });
+  b += t(20, ym + 12, "3KB offset", { cls: "mu", size: 12 });
+  b += arrow(n, 112, ym, 214, ym);
+  b += arrow(n, 420, y1 - 4, 420, y0 + 4);
+  b += t(432, 64, "stack grows backwards", { cls: "mu", size: 12 });
+  b += t(432, 118, "3 − 4 = −1KB", { weight: 600 });
+  b += t(432, 140, "−1KB + 28KB = 27KB", { weight: 600 });
+  svg(n, 640, 196, b, { label: "The stack segment sits from 26KB to 28KB with base 28KB and grows backwards; virtual address 15KB has offset 3KB, 3 minus 4 is −1KB, and −1KB plus 28KB is 27KB" });
+}
+
+// ---- Chapter 17: Free-Space Management ----
+{
+  const n = "fragmentation";
+  const x0 = 80, sx = 16, y = 24;
+  let b = "";
+  [["free", 0, 10, "mb"], ["used", 10, 20, "ja"], ["free", 20, 30, "mb"]].forEach(([label, a, z, cls]) => {
+    b += `<rect x="${x0 + a * sx}" y="${y}" width="${(z - a) * sx - 3}" height="44" class="${cls}" rx="3"/>`;
+    b += t(x0 + ((a + z) / 2) * sx, y + 27, label, { anchor: "middle", cls: cls === "mb" ? "mu" : "on", weight: 600 });
+  });
+  for (const v of [0, 10, 20, 30]) b += t(x0 + v * sx - (v === 30 ? 3 : 0), y + 64, String(v), { anchor: "middle", cls: "mu", size: 11 });
+  svg(n, 640, 100, b, { label: "A 30-byte heap: free from 0 to 10, used from 10 to 20, free from 20 to 30" });
+}
+// Free list drawings. rows: [{ label, nodes: [[addr, len], ...] }]
+const freeList = (n, rows, label) => {
+  const rowH = 74, nw = 96, gap = 132;
+  let b = "", y = 14;
+  for (const row of rows) {
+    if (row.label) { b += t(20, y + 8, row.label, { cls: "mu", size: 12, weight: 600 }); y += 18; }
+    const cy = y + 22;
+    b += t(20, cy + 5, "head", { weight: 600 });
+    b += arrow(n, 58, cy, 76, cy);
+    row.nodes.forEach(([addr, len], i) => {
+      const x = 80 + i * gap;
+      b += `<rect x="${x}" y="${y}" width="${nw}" height="44" class="bx" rx="10"/>`;
+      b += t(x + nw / 2, y + 19, `addr: ${addr}`, { anchor: "middle", size: 12 });
+      b += t(x + nw / 2, y + 35, `len: ${len}`, { anchor: "middle", size: 12 });
+      b += arrow(n, x + nw, cy, x + gap - 4, cy);
+    });
+    b += t(80 + row.nodes.length * gap, cy + 5, "NULL", { weight: 600 });
+    y += rowH - 18;
+    y += 18;
+  }
+  svg(n, 640, y - 12, b, { label });
+};
+freeList("free-list", [{ nodes: [[0, 10], [20, 10]] }], "Free list: head points to a 10-byte chunk at address 0, then a 10-byte chunk at address 20, then NULL");
+freeList("free-list-split", [{ nodes: [[0, 10], [21, 9]] }], "After splitting: head points to the chunk at address 0 of length 10, then address 21 of length 9, then NULL");
+freeList("free-list-coalesce", [
+  { nodes: [[10, 10], [0, 10], [20, 10]] },
+  { label: "instead", nodes: [[0, 30]] },
+], "Three separate 10-byte free chunks at 10, 0 and 20 become one chunk at address 0 of length 30 after coalescing");
+const cell = (x, y, w, h, cls, label, opts = {}) =>
+  `<rect x="${x}" y="${y}" width="${w}" height="${h - 2}" class="${cls}" rx="3"/>` +
+  (label ? t(x + w / 2, y + (h - 2) / 2 + 4.5, label, { anchor: "middle", cls: cls === "mb" ? "mu" : "on", size: 12, weight: 600, ...opts }) : "");
+{
+  const n = "header";
+  const x = 150, w = 180;
+  let b = cell(x, 20, w, 30, "jd", "size: 20") + cell(x, 50, w, 30, "jd", "magic: 1234567") + cell(x, 80, w, 100, "mb", "");
+  b += t(x - 10, 39, "hptr →", { anchor: "end", weight: 600 });
+  b += t(x - 10, 85, "ptr →", { anchor: "end", weight: 600 });
+  b += `<path d="M${x + w + 8} 20 H${x + w + 14} V78 H${x + w + 8}" class="ax" fill="none"/>`;
+  b += t(x + w + 22, 53, "header", { cls: "mu", size: 12 });
+  b += `<path d="M${x + w + 8} 80 H${x + w + 14} V178 H${x + w + 8}" class="ax" fill="none"/>`;
+  b += t(x + w + 22, 133, "20 bytes to caller", { cls: "mu", size: 12 });
+  svg(n, 640, 190, b, { label: "An allocated region: a header with size 20 and magic 1234567 at hptr, followed by the 20 bytes returned to the caller at ptr" });
+}
+{
+  const n = "heap-split";
+  const lx = 70, rx = 400, w = 170;
+  let b = t(lx + w / 2, 22, "VA: 16KB", { anchor: "middle", cls: "mu", size: 12, weight: 600 });
+  b += cell(lx, 34, w, 30, "jc", "size: 4088") + cell(lx, 64, w, 30, "jc", "next: 0") + cell(lx, 94, w, 200, "mb", "4KB");
+  b += t(lx - 10, 53, "heap →", { anchor: "end", weight: 600 });
+  b += t(rx + w / 2, 22, "100 bytes space req → 8 bytes header", { anchor: "middle", cls: "mu", size: 12, weight: 600 });
+  b += cell(rx, 34, w, 30, "ja", "size: 100") + cell(rx, 64, w, 30, "ja", "magic: 1234567") + cell(rx, 94, w, 90, "jb", "100 bytes allocated");
+  b += cell(rx, 184, w, 30, "jc", "size: 3980") + cell(rx, 214, w, 30, "jc", "next: 0") + cell(rx, 244, w, 50, "mb", "3980 bytes");
+  b += t(rx - 10, 99, "ptr →", { anchor: "end", weight: 600 });
+  b += t(rx - 10, 203, "head →", { anchor: "end", weight: 600 });
+  b += arrow(n, lx + w + 10, 150, rx - 60, 150);
+  svg(n, 640, 304, b, { label: "A 4KB heap with one free chunk of size 4088; after a 100-byte request it holds a header (size 100, magic 1234567), 100 allocated bytes, and a free chunk of size 3980" });
+}
+{
+  const n = "fits";
+  const rows = [
+    ["free list", [10, 30, 20], -1],
+    ["Best Fit", [10, 30, 5], 2],
+    ["Worst Fit", [10, 15, 20], 1],
+    ["First Fit", [10, 15, 20], 1],
+  ];
+  let b = "";
+  rows.forEach(([label, sizes, hit], r) => {
+    const y = 14 + r * 50, cy = y + 16;
+    b += t(20, cy + 5, label, { weight: 600 });
+    sizes.forEach((v, i) => {
+      const x = 130 + i * 110;
+      b += `<rect x="${x}" y="${y}" width="64" height="32" class="${i === hit ? "jb" : "bx"}" rx="8"/>`;
+      b += t(x + 32, cy + 5, String(v), { anchor: "middle", cls: i === hit ? "on" : "fg", weight: 600 });
+      b += arrow(n, x + 64, cy, x + 106, cy);
+    });
+    b += t(130 + 3 * 110, cy + 5, "NULL", { weight: 600 });
+  });
+  svg(n, 640, 14 + rows.length * 50, b, { label: "Free list of 10, 30 and 20. For a 15-byte request, best fit uses the 20 chunk leaving 5; worst fit and first fit use the 30 chunk leaving 15" });
+}
+{
+  const n = "buddy";
+  const L = 220, W = 400, h = 34;
+  const blocks = [
+    [0, 0, 64], [1, 0, 32], [1, 32, 32], [2, 0, 16], [2, 16, 16], [3, 0, 8], [3, 8, 8],
+  ];
+  const X = (kb) => L + (kb / 64) * W;
+  let b = "";
+  for (const [lv, at, size] of blocks) {
+    const x = X(at), y = 16 + lv * 54, w = X(at + size) - x - 3;
+    const chosen = lv === 3 && at === 0;
+    b += `<rect x="${x}" y="${y}" width="${w}" height="${h}" class="${chosen ? "jb" : "bx"}" rx="3"/>`;
+    b += t(x + w / 2, y + 22, `${size}KB`, { anchor: "middle", cls: chosen ? "on" : "fg", size: size === 8 ? 11 : 13, weight: 600 });
+    if (lv > 0) b += `<line x1="${x + w / 2}" y1="${y - 20}" x2="${x + w / 2}" y2="${y - 2}" class="ax"/>`;
+  }
+  b += t(20, 38, "request for 7KB", { weight: 600 });
+  b += t(20, 196, "This block gets chosen", { weight: 600 });
+  b += arrow(n, 190, 192, X(0) - 6, 192);
+  b += t(20, 250, "recursively coalesce 8 → 16 → 32 → 64", { cls: "mu", size: 12 });
+  svg(n, 640, 262, b, { label: "Binary buddy allocator: 64KB splits into two 32KB, then 16KB, then 8KB blocks; the first 8KB block is chosen for a 7KB request" });
+}
+
 console.log(fs.readdirSync(out).join("\n"));

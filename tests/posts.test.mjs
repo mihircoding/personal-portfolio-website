@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { loadPosts, dayNumber } from "../scripts/blog/posts.mjs";
+import { loadPosts } from "../scripts/blog/posts.mjs";
 import { generateBlog } from "../scripts/blog/generate.mjs";
 
 const dirWith = (files) => {
@@ -15,12 +15,6 @@ const dirWith = (files) => {
   return root;
 };
 const post = (fm, body = "hello") => `---\n${fm}\n---\n${body}\n`;
-
-test("day numbers count from Nov 16", () => {
-  assert.equal(dayNumber("2026-11-16"), 1);
-  assert.equal(dayNumber("2026-11-18"), 3);
-  assert.equal(dayNumber("2027-03-15"), 120); // across a DST change
-});
 
 test("posts sort newest first, drafts and _files are skipped", () => {
   const root = dirWith({
@@ -60,9 +54,11 @@ test("generates an index and one page per post, escaping titles", async () => {
   assert.deepEqual(Object.keys(inputs).sort(), ["blog", "blog-first", "blog-second"]);
   const page = fs.readFileSync(path.join(root, "blog/first/index.html"), "utf8");
   assert.match(page, /vector&lt;int&gt; &amp; friends/);
+  assert.match(page, /Nov 12, 2026 · 1 min read/);
+  assert.doesNotMatch(page, /Day \d/);
   assert.match(page, /--shiki-dark/);
   assert.doesNotMatch(page, /<script>alert/);
-  assert.match(page, /Next day →/);
+  assert.match(page, /Next post →/);
   assert.match(page, /href="\/blog\/second\/"/);
   const index = fs.readFileSync(path.join(root, "blog/index.html"), "utf8");
   assert.ok(index.indexOf("/blog/second/") < index.indexOf("/blog/first/"));
@@ -75,7 +71,7 @@ test("no posts folder still produces an index", async () => {
   assert.match(fs.readFileSync(inputs.blog, "utf8"), /No entries yet/);
 });
 
-test("posts without a date are listed after every day", () => {
+test("posts without a date are listed after every dated post", () => {
   const root = dirWith({
     "2026-11-12-first.md": post("title: A\ndate: 2026-11-12\ntags: [cpp]"),
     "old-notes.md": post("title: Notes\ntags: [os]"),
@@ -83,7 +79,6 @@ test("posts without a date are listed after every day", () => {
   const posts = loadPosts(path.join(root, "posts"));
   assert.deepEqual(posts.map((p) => p.slug), ["first", "old-notes"]);
   assert.equal(posts[1].date, null);
-  assert.equal(posts[1].day, null);
 });
 
 test("the apps topic is gone", () => {
@@ -105,7 +100,7 @@ test("undated posts and figures render", async () => {
   assert.doesNotMatch(page, /<\?xml/);
   assert.match(page, /<figcaption>FIFO, <em>based on<\/em> Figure 7.2.<\/figcaption>/);
   assert.match(page, /<h2 id="chapter-7-scheduling">/);
-  assert.match(page, /Next day →/);
+  assert.match(page, /Next post →/);
   const day1 = fs.readFileSync(path.join(root, "blog/first/index.html"), "utf8");
   assert.match(day1, /← Earlier notes/);
 });
